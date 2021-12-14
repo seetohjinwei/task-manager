@@ -11,6 +11,7 @@ const initialTasks: ITask[] = [
     name: "Task 1",
     description: "Hello world!",
     tags: ["school", "personal"],
+    isDone: false,
     isChild: false,
     children: [],
   },
@@ -19,6 +20,7 @@ const initialTasks: ITask[] = [
     name: "Find the answer to the problem.",
     description: "Hello Universe!",
     tags: ["empty", "universal threat"],
+    isDone: true,
     isChild: false,
     children: [],
   },
@@ -27,23 +29,29 @@ const initialTasks: ITask[] = [
     name: "Finish this task manager!",
     description: "Hopefully sooner rather than later!",
     tags: ["assignments"],
+    isDone: false,
     isChild: false,
     children: [],
   },
 ];
+const initSearchProps: ISearch = {
+  searchString: "",
+  displayDone: true,
+  strictSearch: false,
+};
+
+// if ANY of the search string or search tags match, will display the task.
+// search string is case insensitive
+// tags are case sensitive
 
 const Home = (): JSX.Element => {
   const [tasks, setTasks] = useState<ITask[]>(initialTasks);
-  const [searchString, setSearchString] = useState<string>("");
-  const searchProp: ISearch = {
-    searchString: searchString,
-    setSearchString: setSearchString,
-  };
+  const [searchProps, setSearchProps] = useState<ISearch>(initSearchProps);
 
   return (
     <div>
-      <Tasks {...{ tasks, searchString }} />
-      <Search {...searchProp} />
+      <Tasks {...{ tasks, searchProps }} />
+      <Search {...{ searchProps, setSearchProps }} />
     </div>
   );
 };

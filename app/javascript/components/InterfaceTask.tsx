@@ -4,6 +4,7 @@ export default interface ITask {
   description: string;
   tags: string[];
   deadline?: Date;
+  isDone: boolean;
   // only support 1 level of children
   isChild: boolean;
   children: ITask[];

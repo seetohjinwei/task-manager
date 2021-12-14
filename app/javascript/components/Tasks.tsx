@@ -1,21 +1,30 @@
+import ISearch from "./InterfaceSearch";
 import ITask from "./InterfaceTask";
 import Task from "./Task";
 import React from "react";
 
-const Tasks = ({
-  tasks,
-  searchString,
-}: {
-  tasks: ITask[];
-  searchString: string;
-}) => {
-  return (
-    <div>
-      {tasks.map((task, index) => (
-        <Task key={index} {...{ task, searchString }} />
-      ))}
-    </div>
-  );
+// TODO: task renders if does NOT match searchString
+// TODO: exception for empty searchString
+
+const Tasks = ({ tasks, searchProps }: { tasks: ITask[]; searchProps: ISearch }) => {
+  const searchString: string = searchProps.searchString;
+  const searchTerms: string[] = searchString.split(" ");
+  function render(task: ITask, index: number) {
+    // empty string is trivially included in every other string
+    // can change to .every() if decide to match ALL search terms
+    // might make that an option (strict search -- match all terms)
+    // "searchOptions maybe" -- include in InterfaceSearch
+    const toRender: boolean = searchTerms.some((searchParam) => {
+      const lowerCaseSearchParam: string = searchParam.toLowerCase();
+      return (
+        (searchParam.startsWith("#") && task.tags.includes(searchParam.slice(1))) ||
+        task.name.toLowerCase().includes(lowerCaseSearchParam) ||
+        task.description.toLowerCase().includes(lowerCaseSearchParam)
+      );
+    });
+    return toRender ? <Task key={index} {...task} /> : null;
+  }
+  return <div>{tasks.map(render)}</div>;
 };
 
 export default Tasks;
