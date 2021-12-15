@@ -6,12 +6,25 @@ const Signup = ({
   userDetails,
   handleSuccessfulAuth,
   handleChange,
+  displayError,
 }: {
   userDetails: IUser;
   handleSuccessfulAuth: (User: IUser) => void;
   handleChange: React.ChangeEventHandler<HTMLInputElement>;
+  displayError: (errorMessage: string) => void;
 }) => {
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
+    event.preventDefault();
+    if (userDetails.username.length < 5) {
+      displayError("Username is required to have at least 5 characters.");
+      return;
+    } else if (userDetails.password.length < 6) {
+      displayError("Password is required to have at least 6 characters.");
+      return;
+    } else if (userDetails.password !== userDetails.password_confirmation) {
+      displayError("Passwords do not match.");
+      return;
+    }
     const user = {
       user: {
         username: userDetails.username,
@@ -23,7 +36,7 @@ const Signup = ({
       .post("http://localhost:3000/registrations", user, { withCredentials: true })
       .then((response) => {
         if (response.data.status === "created") {
-          console.log("user created successfully");
+          // console.log("user created successfully");
           handleSuccessfulAuth({
             ...user.user,
             loginStatus: true,
@@ -31,13 +44,14 @@ const Signup = ({
           });
         } else {
           // render registration error
+          displayError("Username already exists.");
         }
       })
       .catch((error) => {
         // error thrown from database
-        console.log("error in registration", error);
+        displayError("Username already exists!");
+        // console.log("error in registration", error);
       });
-    event.preventDefault();
   };
 
   return (

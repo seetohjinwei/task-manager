@@ -6,12 +6,22 @@ const Login = ({
   userDetails,
   handleSuccessfulAuth,
   handleChange,
+  displayError,
 }: {
   userDetails: IUser;
   handleSuccessfulAuth: (User: IUser) => void;
   handleChange: React.ChangeEventHandler<HTMLInputElement>;
+  displayError: (errorMessage: string) => void;
 }) => {
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
+    event.preventDefault();
+    if (userDetails.username.length < 5) {
+      displayError("Might wanna check your username. (It's too short.)");
+      return;
+    } else if (userDetails.password.length < 6) {
+      displayError("Might wanna check your password. (It's too short.)");
+      return;
+    }
     const user = {
       user: {
         username: userDetails.username,
@@ -21,9 +31,9 @@ const Login = ({
     axios
       .post("http://localhost:3000/sessions", user, { withCredentials: true })
       .then((response) => {
-        console.log("logging response", response);
+        // console.log("logging response", response);
         if (response.data.status === "created") {
-          console.log("user logged in!", response);
+          // console.log("user logged in!", response);
           handleSuccessfulAuth({
             ...user.user,
             password_confirmation: user.user.password,
@@ -32,13 +42,14 @@ const Login = ({
           });
         } else {
           // render registration error
+          displayError("Wrong username or password.");
         }
       })
       .catch((error) => {
         // error thrown from database
-        console.log("error in registration", error);
+        displayError("Wrong username or password.");
+        // console.log("Wrong username or password.", error);
       });
-    event.preventDefault();
   };
 
   return (
@@ -63,6 +74,7 @@ const Login = ({
 
         <button type="submit">Login!</button>
       </form>
+      <div>{userDetails.authenticationErrors}</div>
     </div>
   );
 };

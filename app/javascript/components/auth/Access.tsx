@@ -22,11 +22,15 @@ const Access = ({
     setUserDetails({ ...userDetails, [event.target.name]: event.target.value });
   };
 
+  const displayError = (errorMessage: string): void => {
+    setUserDetails({ ...userDetails, authenticationErrors: errorMessage });
+  };
+
   // TODO: add button to switch between signup/login
   return (
     <div>
-      <Signup {...{ userDetails, handleSuccessfulAuth, handleChange }} />
-      <Login {...{ userDetails, handleSuccessfulAuth, handleChange }} />
+      <Signup {...{ userDetails, handleSuccessfulAuth, handleChange, displayError }} />
+      <Login {...{ userDetails, handleSuccessfulAuth, handleChange, displayError }} />
     </div>
   );
 };
