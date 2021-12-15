@@ -4,6 +4,8 @@ import IUser from "./interfaces/InterfaceUser";
 import Search from "./Search";
 import Tasks from "./Tasks";
 import React, { useState } from "react";
+// import { Link } from "react-router-dom";
+import Logout from "./auth/Logout";
 
 // temporary testing tasks
 const initialTasks: ITask[] = [
@@ -46,17 +48,40 @@ const initSearchProps: ISearch = {
 // search string is case insensitive
 // tags are case sensitive
 
-const Dashboard = (userDetails: IUser) => {
+const Dashboard = ({
+  userDetails,
+  setUserDetails,
+}: {
+  userDetails: IUser;
+  setUserDetails: React.Dispatch<React.SetStateAction<IUser>>;
+}) => {
   const [tasks, setTasks] = useState<ITask[]>(initialTasks);
   const [searchProps, setSearchProps] = useState<ISearch>(initSearchProps);
 
   return (
     <div>
       <p>{"Hello " + userDetails.username + "!"}</p>
+      <Logout {...{ userDetails, setUserDetails }} />
       <Tasks {...{ tasks, searchProps }} />
       <Search {...{ searchProps, setSearchProps }} />
     </div>
   );
+  // if (userDetails.loginStatus) {
+  //   return (
+  //     <div>
+  //       <p>{"Hello " + userDetails.username + "!"}</p>
+  //       <Tasks {...{ tasks, searchProps }} />
+  //       <Search {...{ searchProps, setSearchProps }} />
+  //     </div>
+  //   );
+  // } else {
+  //   return (
+  //     <div>
+  //       <p>You're not logged in!</p>
+  //       <Link to="/">Go to login page</Link>
+  //     </div>
+  //   );
+  // }
 };
 
 export default Dashboard;

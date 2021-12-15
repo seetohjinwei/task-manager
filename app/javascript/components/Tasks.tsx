@@ -3,9 +3,6 @@ import ITask from "./interfaces/InterfaceTask";
 import Task from "./Task";
 import React from "react";
 
-// TODO: task renders if does NOT match searchString
-// TODO: exception for empty searchString
-
 const Tasks = ({ tasks, searchProps }: { tasks: ITask[]; searchProps: ISearch }) => {
   // console.log(searchProps);
   const searchString: string = searchProps.searchString;
@@ -17,6 +14,7 @@ const Tasks = ({ tasks, searchProps }: { tasks: ITask[]; searchProps: ISearch })
     // might make that an option (strict search -- match all terms)
     // "searchOptions maybe" -- include in InterfaceSearch
     const matchParam = (searchParam: string): boolean => {
+      // decides if each search parameter matches this task
       const lowerCaseSearchParam: string = searchParam.toLowerCase();
       return (
         (searchParam.startsWith("#") &&
@@ -28,7 +26,6 @@ const Tasks = ({ tasks, searchProps }: { tasks: ITask[]; searchProps: ISearch })
     const toRender: boolean = searchProps.strictSearch
       ? searchTerms.every(matchParam)
       : searchTerms.some(matchParam);
-    // const toRender: boolean = searchTerms.some(verify);
     return toRender ? <Task key={index} {...task} /> : null;
   }
   return <div>{tasks.map(render)}</div>;
