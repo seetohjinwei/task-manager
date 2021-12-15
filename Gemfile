@@ -48,3 +48,6 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem "react-rails", "~> 2.6"
+
+gem 'bcrypt', '~> 3.1', '>= 3.1.16'
+gem 'rack-cors', :require => 'rack/cors'

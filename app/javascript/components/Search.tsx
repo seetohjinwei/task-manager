@@ -1,4 +1,4 @@
-import ISearch from "./InterfaceSearch";
+import ISearch from "./interfaces/InterfaceSearch";
 import React from "react";
 
 // renders the search box

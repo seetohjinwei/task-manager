@@ -1,5 +1,5 @@
-import ISearch from "./InterfaceSearch";
-import ITask from "./InterfaceTask";
+import ISearch from "./interfaces/InterfaceSearch";
+import ITask from "./interfaces/InterfaceTask";
 import Task from "./Task";
 import React from "react";
 

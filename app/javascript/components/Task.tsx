@@ -1,8 +1,8 @@
-import ITask from "./InterfaceTask";
+import ITask from "./interfaces/InterfaceTask";
 import React from "react";
 
 const Task = (task: ITask) => {
-  console.log(task);
+  // console.log(task);
   return (
     <div>
       <p>{task.name}</p>

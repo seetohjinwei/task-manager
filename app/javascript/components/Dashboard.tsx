@@ -1,5 +1,6 @@
-import ISearch from "./InterfaceSearch";
-import ITask from "./InterfaceTask";
+import ISearch from "./interfaces/InterfaceSearch";
+import ITask from "./interfaces/InterfaceTask";
+import IUser from "./interfaces/InterfaceUser";
 import Search from "./Search";
 import Tasks from "./Tasks";
 import React, { useState } from "react";
@@ -34,6 +35,7 @@ const initialTasks: ITask[] = [
     children: [],
   },
 ];
+
 const initSearchProps: ISearch = {
   searchString: "",
   displayDone: true,
@@ -44,16 +46,17 @@ const initSearchProps: ISearch = {
 // search string is case insensitive
 // tags are case sensitive
 
-const Home = (): JSX.Element => {
+const Dashboard = (userDetails: IUser) => {
   const [tasks, setTasks] = useState<ITask[]>(initialTasks);
   const [searchProps, setSearchProps] = useState<ISearch>(initSearchProps);
 
   return (
     <div>
+      <p>{"Hello " + userDetails.username + "!"}</p>
       <Tasks {...{ tasks, searchProps }} />
       <Search {...{ searchProps, setSearchProps }} />
     </div>
   );
 };
 
-export default Home;
+export default Dashboard;
