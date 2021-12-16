@@ -4,9 +4,7 @@ import Task from "./Task";
 import React from "react";
 
 const Tasks = ({ tasks, searchProps }: { tasks: ITask[]; searchProps: ISearch }) => {
-  // console.log(searchProps);
   const searchString: string = searchProps.searchString;
-  // console.log(searchString);
   const searchTerms: string[] = searchString.split(" ");
   function render(task: ITask, index: number) {
     // empty string is trivially included in every other string

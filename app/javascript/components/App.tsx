@@ -1,9 +1,8 @@
 import IUser from "./interfaces/InterfaceUser";
-import Dashboard from "./Dashboard";
 import Access from "./auth/Access";
+import Dashboard from "./Dashboard";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-// import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 // main application page
 
@@ -17,7 +16,6 @@ const initUser: IUser = {
 
 const App = () => {
   const checkLoginStatus = () => {
-    // console.log("checking login status");
     axios
       .get("http://localhost:3000/logged_in", { withCredentials: true })
       .then((response) => {
@@ -49,16 +47,6 @@ const App = () => {
   } else {
     return <Access {...{ userDetails, setUserDetails }} />;
   }
-  // trying out using single page for now
-  // return (
-  //   <Router>
-  //     <Routes>
-  //       <Route path="/" element={<Access {...{ userDetails, setUserDetails }} />} />
-  //       {/* <Route path="/dashboard" element={<Dashboard {...{ userDetails, setUserDetails }} />} /> */}
-  //       <Route path="/dashboard" element={<Dashboard {...userDetails} />} />
-  //     </Routes>
-  //   </Router>
-  // );
 };
 
 export default App;

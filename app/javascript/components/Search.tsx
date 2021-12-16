@@ -11,11 +11,9 @@ const Search = ({
 }) => {
   const handleOnChangeCheckbox: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     setSearchProps({ ...searchProps, [event.target.name]: event.target.checked });
-    // console.log(searchProps);
   };
   const handleOnChangeString: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     setSearchProps({ ...searchProps, [event.target.name]: event.target.value });
-    // console.log(searchProps);
   };
 
   return (
@@ -42,7 +40,6 @@ const Search = ({
       />
     </form>
   );
-  // return <div>This is the search form. This is the search string: {searchProps.searchString}.</div>;
 };
 
 export default Search;
