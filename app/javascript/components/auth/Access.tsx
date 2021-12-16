@@ -1,8 +1,8 @@
 import IUser from "../interfaces/InterfaceUser";
 import Login from "./Login";
 import Signup from "./Signup";
-import React, { useEffect } from "react";
-// import { useNavigate, Link } from "react-router-dom";
+import React, { useState } from "react";
+import Alert from "react-bootstrap/Alert";
 
 const Access = ({
   userDetails,
@@ -11,20 +11,13 @@ const Access = ({
   userDetails: IUser;
   setUserDetails: React.Dispatch<React.SetStateAction<IUser>>;
 }) => {
-  // const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   // redirect to dashboard if logged_in
-  //   console.log(userDetails.loginStatus);
-  //   if (userDetails.loginStatus) {
-  //     navigate("/dashboard");
-  //   }
-  // }, []);
+  const [showError, setShowError] = useState(false);
+  // showLogin === true: login, showLogin === false: signup
+  const [showLogin, setShowLogin] = useState(true);
 
   const handleSuccessfulAuth = (user: IUser): void => {
     console.log("Handling successful authentication.");
     setUserDetails(user);
-    // navigate("/dashboard");
   };
 
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
@@ -32,33 +25,53 @@ const Access = ({
   };
 
   const displayError = (errorMessage: string): void => {
+    setShowError(true);
     setUserDetails({ ...userDetails, authenticationErrors: errorMessage });
   };
 
-  // TODO: add button to switch between signup/login
+  const hideError = () => {
+    setShowError(false);
+  };
+
+  const toggleLoginSignup = () => {
+    setShowLogin(!showLogin);
+  };
+
   return (
+    // CSS: align center of screen
     <div>
-      <Signup {...{ userDetails, handleSuccessfulAuth, handleChange, displayError }} />
-      <Login {...{ userDetails, handleSuccessfulAuth, handleChange, displayError }} />
+      <div className="d-flex justify-content-center align-items-center">
+        {showLogin ? (
+          <Login
+            {...{
+              userDetails,
+              handleSuccessfulAuth,
+              handleChange,
+              displayError,
+              toggleLoginSignup,
+            }}
+          />
+        ) : (
+          <Signup
+            {...{
+              userDetails,
+              handleSuccessfulAuth,
+              handleChange,
+              displayError,
+              toggleLoginSignup,
+            }}
+          />
+        )}
+      </div>
+      <div className="d-flex justify-content-center align-items-center mt-3">
+        {showError && (
+          <Alert variant="warning" onClose={hideError} dismissible>
+            {userDetails.authenticationErrors}
+          </Alert>
+        )}
+      </div>
     </div>
   );
-  // if (userDetails.loginStatus) {
-  //   // useEffect(() => navigate("/dashboard"));
-  //   // navigate("/dashboard");
-  //   return (
-  //     <div>
-  //       <h1>Welcome {userDetails.username}!</h1>
-  //       <Link to={"/dashboard"}>Go to Dashboard</Link>
-  //     </div>
-  //   );
-  // } else {
-  //   return (
-  //     <div>
-  //       <Signup {...{ userDetails, handleSuccessfulAuth, handleChange, displayError }} />
-  //       <Login {...{ userDetails, handleSuccessfulAuth, handleChange, displayError }} />
-  //     </div>
-  //   );
-  // }
 };
 
 export default Access;

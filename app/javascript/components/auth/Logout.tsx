@@ -1,6 +1,7 @@
 import IUser from "../interfaces/InterfaceUser";
 import axios from "axios";
 import React from "react";
+import Button from "react-bootstrap/Button";
 
 const Logout = ({
   userDetails,
@@ -22,7 +23,11 @@ const Logout = ({
       password_confirmation: "",
     });
   };
-  return <button onClick={handleLogout}>Logout</button>;
+  return (
+    <Button variant="secondary" onClick={handleLogout}>
+      Logout
+    </Button>
+  );
 };
 
 export default Logout;

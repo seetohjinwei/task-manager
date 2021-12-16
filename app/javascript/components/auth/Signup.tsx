@@ -1,17 +1,21 @@
 import IUser from "../interfaces/InterfaceUser";
 import axios from "axios";
 import React from "react";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
 
 const Signup = ({
   userDetails,
   handleSuccessfulAuth,
   handleChange,
   displayError,
+  toggleLoginSignup,
 }: {
   userDetails: IUser;
   handleSuccessfulAuth: (User: IUser) => void;
   handleChange: React.ChangeEventHandler<HTMLInputElement>;
   displayError: (errorMessage: string) => void;
+  toggleLoginSignup: () => void;
 }) => {
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
@@ -36,7 +40,6 @@ const Signup = ({
       .post("http://localhost:3000/registrations", user, { withCredentials: true })
       .then((response) => {
         if (response.data.status === "created") {
-          // console.log("user created successfully");
           handleSuccessfulAuth({
             ...user.user,
             loginStatus: true,
@@ -50,14 +53,15 @@ const Signup = ({
       .catch((error) => {
         // error thrown from database
         displayError("Username already exists!");
-        // console.log("error in registration", error);
       });
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <input
+    <Form onSubmit={handleSubmit}>
+      <h3 className="text-center">Sign Up Form</h3>
+      <Form.Group className="mb-3">
+        <Form.Label>Username</Form.Label>
+        <Form.Control
           type="text"
           name="username"
           placeholder="Username"
@@ -65,7 +69,11 @@ const Signup = ({
           onChange={handleChange}
           required
         />
-        <input
+        <Form.Text muted>Username must be at least 5 characters long.</Form.Text>
+      </Form.Group>
+      <Form.Group className="mb-3">
+        <Form.Label>Password</Form.Label>
+        <Form.Control
           type="password"
           name="password"
           placeholder="Password"
@@ -73,7 +81,11 @@ const Signup = ({
           onChange={handleChange}
           required
         />
-        <input
+        <Form.Text muted>Passwords must be at least 6 characters long.</Form.Text>
+      </Form.Group>
+      <Form.Group className="mb-3">
+        <Form.Label>Confirm Password</Form.Label>
+        <Form.Control
           type="password"
           name="password_confirmation"
           placeholder="Confirm Password"
@@ -81,10 +93,19 @@ const Signup = ({
           onChange={handleChange}
           required
         />
-
-        <button type="submit">Sign up!</button>
-      </form>
-    </div>
+        {userDetails.password_confirmation &&
+          userDetails.password !== userDetails.password_confirmation && (
+            <Form.Text muted>Passwords do not match.</Form.Text>
+          )}
+      </Form.Group>
+      <Button variant="primary" type="submit">
+        Sign Up!
+      </Button>
+      {/* align button to right */}
+      <Button className="float-end" onClick={toggleLoginSignup} variant="secondary">
+        Login instead!
+      </Button>
+    </Form>
   );
 };
 

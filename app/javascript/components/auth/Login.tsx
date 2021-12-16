@@ -1,17 +1,21 @@
 import IUser from "../interfaces/InterfaceUser";
 import axios from "axios";
 import React from "react";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
 
 const Login = ({
   userDetails,
   handleSuccessfulAuth,
   handleChange,
   displayError,
+  toggleLoginSignup,
 }: {
   userDetails: IUser;
   handleSuccessfulAuth: (User: IUser) => void;
   handleChange: React.ChangeEventHandler<HTMLInputElement>;
   displayError: (errorMessage: string) => void;
+  toggleLoginSignup: () => void;
 }) => {
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
@@ -31,9 +35,7 @@ const Login = ({
     axios
       .post("http://localhost:3000/sessions", user, { withCredentials: true })
       .then((response) => {
-        // console.log("logging response", response);
         if (response.data.status === "created") {
-          // console.log("user logged in!", response);
           handleSuccessfulAuth({
             ...user.user,
             password_confirmation: user.user.password,
@@ -48,14 +50,15 @@ const Login = ({
       .catch((error) => {
         // error thrown from database
         displayError("Wrong username or password.");
-        // console.log("Wrong username or password.", error);
       });
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <input
+    <Form onSubmit={handleSubmit}>
+      <h3 className="text-center">Welcome back!</h3>
+      <Form.Group className="mb-3">
+        <Form.Label>Username</Form.Label>
+        <Form.Control
           type="text"
           name="username"
           placeholder="Username"
@@ -63,7 +66,10 @@ const Login = ({
           onChange={handleChange}
           required
         />
-        <input
+      </Form.Group>
+      <Form.Group className="mb-3">
+        <Form.Label>Password</Form.Label>
+        <Form.Control
           type="password"
           name="password"
           placeholder="Password"
@@ -71,11 +77,15 @@ const Login = ({
           onChange={handleChange}
           required
         />
-
-        <button type="submit">Login!</button>
-      </form>
-      <div>{userDetails.authenticationErrors}</div>
-    </div>
+      </Form.Group>
+      <Button variant="primary" type="submit">
+        Login!
+      </Button>
+      {/* align button to right */}
+      <Button className="float-end" onClick={toggleLoginSignup} variant="secondary">
+        Sign up instead!
+      </Button>
+    </Form>
   );
 };
 
