@@ -1,5 +1,6 @@
 import ISearch from "./interfaces/InterfaceSearch";
 import React from "react";
+import Form from "react-bootstrap/Form";
 
 // renders the search box
 const Search = ({
@@ -17,28 +18,35 @@ const Search = ({
   };
 
   return (
-    <form>
-      <input
-        type="checkbox"
-        name="displayDone"
-        checked={searchProps.displayDone}
-        onChange={handleOnChangeCheckbox}
-      />
-      {"Show Finished Tasks"}
-      <input
-        type="checkbox"
-        name="strictSearch"
-        checked={searchProps.strictSearch}
-        onChange={handleOnChangeCheckbox}
-      />
-      {"Match All Search Terms"}
-      <input
-        type="text"
-        name="searchString"
-        value={searchProps.searchString}
-        onChange={handleOnChangeString}
-      />
-    </form>
+    <div className="d-flex">
+      <Form>
+        <Form.Group>
+          <Form.Control
+            type="text"
+            name="searchString"
+            placeholder="Search..."
+            value={searchProps.searchString}
+            onChange={handleOnChangeString}
+          ></Form.Control>
+        </Form.Group>
+        <Form.Check
+          inline
+          type="switch"
+          label="Show Finished Tasks"
+          name="displayDone"
+          checked={searchProps.displayDone}
+          onChange={handleOnChangeCheckbox}
+        />
+        <Form.Check
+          inline
+          type="switch"
+          label="Match All Search Terms"
+          name="strictSearch"
+          checked={searchProps.strictSearch}
+          onChange={handleOnChangeCheckbox}
+        />
+      </Form>
+    </div>
   );
 };
 

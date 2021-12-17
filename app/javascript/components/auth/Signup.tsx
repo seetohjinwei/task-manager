@@ -58,7 +58,7 @@ const Signup = ({
 
   return (
     <Form onSubmit={handleSubmit}>
-      <h3 className="text-center">Sign Up Form</h3>
+      <h1 className="display-2 text-center">Sign Up Form</h1>
       <Form.Group className="mb-3">
         <Form.Label>Username</Form.Label>
         <Form.Control

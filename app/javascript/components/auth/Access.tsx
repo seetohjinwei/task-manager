@@ -16,7 +16,7 @@ const Access = ({
   const [showLogin, setShowLogin] = useState(true);
 
   const handleSuccessfulAuth = (user: IUser): void => {
-    console.log("Handling successful authentication.");
+    // console.log("Handling successful authentication.");
     setUserDetails(user);
   };
 
@@ -34,13 +34,15 @@ const Access = ({
   };
 
   const toggleLoginSignup = () => {
+    // resets all fields as well
+    setUserDetails({ ...userDetails, username: "", password: "", password_confirmation: "" });
     setShowLogin(!showLogin);
   };
 
   return (
     // CSS: align center of screen
     <div>
-      <div className="d-flex justify-content-center align-items-center">
+      <div className="fs-4 d-flex justify-content-center align-items-center">
         {showLogin ? (
           <Login
             {...{

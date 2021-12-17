@@ -24,7 +24,7 @@ const Logout = ({
     });
   };
   return (
-    <Button variant="secondary" onClick={handleLogout}>
+    <Button className="my-2" variant="secondary" onClick={handleLogout}>
       Logout
     </Button>
   );

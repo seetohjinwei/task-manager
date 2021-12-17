@@ -3,10 +3,7 @@ export default interface ITask {
   name: string;
   description: string;
   tags: string[];
-  // date or string better for deadline?
-  deadline?: Date;
+  // date or string better for deadline
+  deadline?: string;
   isDone: boolean;
-  // only support 1 level of children
-  isChild: boolean;
-  children: ITask[];
 }
