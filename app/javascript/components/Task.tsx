@@ -6,9 +6,10 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 
 const Task = (task: ITask) => {
+  // console.log(task);
   return (
     // deadline and tags render only if not empty
-    <Card bg="light" border="dark" className={task.isDone ? "text-muted" : ""} body>
+    <Card bg="light" border="dark" className={task.isdone ? "text-muted" : ""} body>
       <Card.Title className="d-flex justify-content-between">
         <Col className="col-10">{task.name}</Col>
         <Col className="col-1">

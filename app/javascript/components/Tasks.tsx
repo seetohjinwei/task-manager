@@ -14,25 +14,35 @@ const Tasks = ({ tasks, searchProps }: { tasks: ITask[]; searchProps: ISearch })
     // can change to .every() if decide to match ALL search terms
     // might make that an option (strict search -- match all terms)
     // "searchOptions maybe" -- include in InterfaceSearch
-
-    const matchParam = (searchParam: string): boolean => {
-      // decides if each search parameter matches this task
-      if (searchParam === "") {
-        // ignores empty search term
+    const matchParamStrict = (searchParam: string): boolean => {
+      if (searchString !== "" && searchParam === "") {
         return true;
+      } else {
+        const lowerCaseSearchParam: string = searchParam.toLowerCase();
+        return (
+          (searchParam.startsWith("#") && task.tags.join(" ").includes(searchParam.slice(1))) ||
+          task.name.toLowerCase().includes(lowerCaseSearchParam) ||
+          task.description.toLowerCase().includes(lowerCaseSearchParam)
+        );
+      }
+    };
+    const matchParamNotStrict = (searchParam: string): boolean => {
+      // decides if each search parameter matches this task
+      if (searchString !== "" && searchParam === "") {
+        // ignores empty search term
+        return false;
       }
       const lowerCaseSearchParam: string = searchParam.toLowerCase();
       return (
-        (searchParam.startsWith("#") &&
-          task.tags.some((tag) => tag.includes(searchParam.slice(1)))) ||
+        (searchParam.startsWith("#") && task.tags.join(" ").includes(searchParam.slice(1))) ||
         task.name.toLowerCase().includes(lowerCaseSearchParam) ||
         task.description.toLowerCase().includes(lowerCaseSearchParam)
       );
     };
-    const passDisplayDone: boolean = searchProps.displayDone || !task.isDone;
+    const passDisplayDone: boolean = searchProps.displayDone || !task.isdone;
     const passStrictSearch: boolean = searchProps.strictSearch
-      ? searchTerms.every(matchParam)
-      : searchTerms.some(matchParam);
+      ? searchTerms.every(matchParamStrict)
+      : searchTerms.some(matchParamNotStrict);
 
     return (
       passDisplayDone &&

@@ -27,18 +27,16 @@ const Login = ({
       return;
     }
     const user = {
-      user: {
-        username: userDetails.username,
-        password: userDetails.password,
-      },
+      username: userDetails.username,
+      password: userDetails.password,
     };
     axios
       .post("http://localhost:3000/sessions", user, { withCredentials: true })
       .then((response) => {
-        if (response.data.status === "created") {
+        if (response.status === 200) {
           handleSuccessfulAuth({
-            ...user.user,
-            password_confirmation: user.user.password,
+            ...user,
+            password_confirmation: user.password,
             loginStatus: true,
             authenticationErrors: userDetails.authenticationErrors,
           });

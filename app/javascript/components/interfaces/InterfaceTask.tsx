@@ -3,7 +3,6 @@ export default interface ITask {
   name: string;
   description: string;
   tags: string[];
-  // date or string better for deadline
-  deadline?: string;
-  isDone: boolean;
+  deadline: string;
+  isdone: boolean;
 }

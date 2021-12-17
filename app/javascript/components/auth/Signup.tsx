@@ -30,18 +30,16 @@ const Signup = ({
       return;
     }
     const user = {
-      user: {
-        username: userDetails.username,
-        password: userDetails.password,
-        password_confirmation: userDetails.password_confirmation,
-      },
+      username: userDetails.username,
+      password: userDetails.password,
+      password_confirmation: userDetails.password_confirmation,
     };
     axios
       .post("http://localhost:3000/registrations", user, { withCredentials: true })
       .then((response) => {
-        if (response.data.status === "created") {
+        if (response.status === 200) {
           handleSuccessfulAuth({
-            ...user.user,
+            ...user,
             loginStatus: true,
             authenticationErrors: userDetails.authenticationErrors,
           });
