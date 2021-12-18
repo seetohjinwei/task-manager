@@ -2,6 +2,7 @@ import ISearch from "./interfaces/InterfaceSearch";
 import ITask from "./interfaces/InterfaceTask";
 import Task from "./Task";
 import React from "react";
+// import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -9,11 +10,13 @@ import axios from "axios";
 
 const Tasks = ({
   tasks,
+  setTasks,
   searchProps,
   loadTasks,
 }: {
   tasks: ITask[];
   searchProps: ISearch;
+  setTasks: React.Dispatch<React.SetStateAction<ITask[]>>;
   loadTasks: () => void;
 }) => {
   const searchString: string = searchProps.searchString;
@@ -58,28 +61,49 @@ const Tasks = ({
       passStrictSearch && (
         // renders however many tasks on 1 row
         <Col className="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 col-xxl-3" key={index}>
-          <Task {...task} />
+          <Task {...{ task, updateTask, deleteTask }} />
         </Col>
       )
     );
   }
 
-  const updateTask = (task: {
-    id: number;
-    name?: string;
-    description?: string;
-    tags?: string[];
-    deadline?: string;
-    isdone?: boolean;
-  }) => {
+  const updateTask = (
+    originalTask: ITask,
+    newTask: {
+      id: number;
+      name?: string;
+      description?: string;
+      tags?: string[];
+      deadline?: string;
+      isdone?: boolean;
+    }
+  ) => {
     axios
-      .patch(`http://localhost:3000/tasks/${task.id}`, task, { withCredentials: true })
+      .patch(`http://localhost:3000/tasks/${newTask.id}`, newTask, { withCredentials: true })
       .then((response) => {
         if (response.status === 200) {
-          // currently I'm just force reloading all tasks from database
-          loadTasks();
+          const index: number = tasks.indexOf(originalTask);
+          const tasksCopy: ITask[] = [...tasks];
+          tasksCopy[index] = response.data.task;
+          setTasks(tasksCopy);
         } else {
-          console.log("error!");
+          console.log("error!", response);
+        }
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  const deleteTask = (task: ITask) => {
+    axios
+      .delete(`http://localhost:3000/tasks/${task.id}`, { withCredentials: true })
+      .then((response) => {
+        if (response.status === 200) {
+          const index: number = tasks.indexOf(task);
+          const tasksCopy: ITask[] = [...tasks];
+          tasksCopy.splice(index, 1);
+          setTasks(tasksCopy);
+        } else {
+          console.log("error!", response);
         }
       })
       .catch((error) => console.log("error", error));

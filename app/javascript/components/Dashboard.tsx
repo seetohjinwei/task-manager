@@ -1,11 +1,15 @@
+import { TaskAdder } from "./Functions/TaskFunctions";
 import ISearch from "./interfaces/InterfaceSearch";
 import ITask from "./interfaces/InterfaceTask";
 import IUser from "./interfaces/InterfaceUser";
-import NavigationBar from "./NavigationBar";
-import Search from "./Search";
-import Tasks from "./Tasks";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import Button from "react-bootstrap/Button";
+import Col from "react-bootstrap/Col";
+import NavigationBar from "./NavigationBar";
+import Row from "react-bootstrap/Row";
+import Search from "./Search";
+import Tasks from "./Tasks";
 
 const initSearchProps: ISearch = {
   searchString: "",
@@ -27,6 +31,7 @@ const Dashboard = ({
   const [tasks, setTasks] = useState<ITask[]>([]);
   const [searchProps, setSearchProps] = useState<ISearch>(initSearchProps);
   const [welcomeMessage, setWelcomeMessage] = useState("");
+  const [showAddModal, setShowAddModal] = useState(false);
   const welcomeMessages = [
     // prefix + username + postfix
     ["Hello ", "!"],
@@ -61,10 +66,22 @@ const Dashboard = ({
   return (
     <div>
       <NavigationBar {...{ userDetails, setUserDetails }} />
+      <TaskAdder {...{ showAddModal, setShowAddModal, tasks, setTasks }} />
       <div className="m-5">
-        <h1>{welcomeMessage}</h1>
-        <Search {...{ searchProps, setSearchProps }} />
-        <Tasks {...{ tasks, searchProps, loadTasks }} />
+        <Row>
+          <Col className="col-2"></Col>
+          <Col>
+            <h1>{welcomeMessage}</h1>
+            <Search {...{ searchProps, setSearchProps }} />
+          </Col>
+          <Col>
+            <Button className="float-end" onClick={() => setShowAddModal(true)}>
+              Add Task
+            </Button>
+          </Col>
+          <Col className="col-2"></Col>
+        </Row>
+        <Tasks {...{ tasks, setTasks, searchProps, loadTasks }} />
       </div>
     </div>
   );
