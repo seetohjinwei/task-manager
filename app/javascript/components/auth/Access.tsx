@@ -2,6 +2,7 @@ import IUser from "../interfaces/InterfaceUser";
 import Login from "./Login";
 import Signup from "./Signup";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Alert from "react-bootstrap/Alert";
 
 const Access = ({
@@ -14,10 +15,12 @@ const Access = ({
   const [showError, setShowError] = useState(false);
   // showLogin === true: login, showLogin === false: signup
   const [showLogin, setShowLogin] = useState(true);
+  const navigate = useNavigate();
 
   const handleSuccessfulAuth = (user: IUser): void => {
     // console.log("Handling successful authentication.");
     setUserDetails(user);
+    navigate("/dashboard");
   };
 
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {

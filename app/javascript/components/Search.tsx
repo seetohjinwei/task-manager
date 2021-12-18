@@ -18,7 +18,7 @@ const Search = ({
   };
 
   return (
-    <div className="d-flex">
+    <div className="d-flex my-3">
       <Form>
         <Form.Group>
           <Form.Control

@@ -1,5 +1,6 @@
 import IUser from "../interfaces/InterfaceUser";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import React from "react";
 import Button from "react-bootstrap/Button";
 
@@ -10,6 +11,7 @@ const Logout = ({
   userDetails: IUser;
   setUserDetails: React.Dispatch<React.SetStateAction<IUser>>;
 }) => {
+  const navigate = useNavigate();
   const handleLogout: React.MouseEventHandler<HTMLButtonElement> = (event) => {
     axios
       .delete("http://localhost:3000/logout", { withCredentials: true })
@@ -22,9 +24,10 @@ const Logout = ({
       password: "",
       password_confirmation: "",
     });
+    navigate("/");
   };
   return (
-    <Button className="my-2" variant="secondary" onClick={handleLogout}>
+    <Button variant="dark" onClick={handleLogout}>
       Logout
     </Button>
   );

@@ -5,8 +5,17 @@ import React from "react";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
+import axios from "axios";
 
-const Tasks = ({ tasks, searchProps }: { tasks: ITask[]; searchProps: ISearch }) => {
+const Tasks = ({
+  tasks,
+  searchProps,
+  loadTasks,
+}: {
+  tasks: ITask[];
+  searchProps: ISearch;
+  loadTasks: () => void;
+}) => {
   const searchString: string = searchProps.searchString;
   const searchTerms: string[] = searchString.split(" ");
   function render(task: ITask, index: number) {
@@ -54,6 +63,27 @@ const Tasks = ({ tasks, searchProps }: { tasks: ITask[]; searchProps: ISearch })
       )
     );
   }
+
+  const updateTask = (task: {
+    id: number;
+    name?: string;
+    description?: string;
+    tags?: string[];
+    deadline?: string;
+    isdone?: boolean;
+  }) => {
+    axios
+      .patch(`http://localhost:3000/tasks/${task.id}`, task, { withCredentials: true })
+      .then((response) => {
+        if (response.status === 200) {
+          // currently I'm just force reloading all tasks from database
+          loadTasks();
+        } else {
+          console.log("error!");
+        }
+      })
+      .catch((error) => console.log("error", error));
+  };
 
   return (
     <Container>

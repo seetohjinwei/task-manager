@@ -3,6 +3,7 @@ import Access from "./auth/Access";
 import Dashboard from "./Dashboard";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 // main application page
 
@@ -42,11 +43,20 @@ const App = () => {
   useEffect(checkLoginStatus, []);
 
   const [userDetails, setUserDetails] = useState(initUser);
-  if (userDetails.loginStatus) {
-    return <Dashboard {...{ userDetails, setUserDetails }} />;
-  } else {
-    return <Access {...{ userDetails, setUserDetails }} />;
-  }
+  // if (userDetails.loginStatus) {
+  //   return <Dashboard {...{ userDetails, setUserDetails }} />;
+  // } else {
+  //   return <Access {...{ userDetails, setUserDetails }} />;
+  // }
+
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Access {...{ userDetails, setUserDetails }} />} />
+        <Route path="/dashboard" element={<Dashboard {...{ userDetails, setUserDetails }} />} />
+      </Routes>
+    </Router>
+  );
 };
 
 export default App;

@@ -61,14 +61,8 @@ class TasksController < ApplicationController
   def update
     user = User.find(session[:user_id])
     task = Task.find(params[:id])
-    done = task.update(
-      name: params["name"],
-      description: params["description"],
-      deadline: params["deadline"],
-      isdone: params["isdone"],
-      tags: params["tags"],
-      user: user
-    )
+    # does not require ALL parameters anymore
+    done = task.update(task_params)
     if done
       render json: {
         status: "success",
@@ -97,5 +91,11 @@ class TasksController < ApplicationController
         status: "internal server error"
       }, status: 500
     end
+  end
+
+  private
+
+  def task_params
+    params.require(:task).permit(:name, :description, :tags, :deadline, :isdone, :user)
   end
 end

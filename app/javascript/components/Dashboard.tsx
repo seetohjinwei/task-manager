@@ -1,7 +1,7 @@
 import ISearch from "./interfaces/InterfaceSearch";
 import ITask from "./interfaces/InterfaceTask";
 import IUser from "./interfaces/InterfaceUser";
-import Logout from "./auth/Logout";
+import NavigationBar from "./NavigationBar";
 import Search from "./Search";
 import Tasks from "./Tasks";
 import axios from "axios";
@@ -39,9 +39,11 @@ const Dashboard = ({
     ["You're back, ", "!"],
   ];
   useEffect(() => {
-    // randomise welcome message on page load
+    // randomise welcome message on page load (or userDetails change)
     const index = Math.floor(Math.random() * welcomeMessages.length);
     setWelcomeMessage(welcomeMessages[index][0] + userDetails.username + welcomeMessages[index][1]);
+  }, [userDetails]);
+  const loadTasks = () => {
     // fetch tasks from database
     axios
       .get("http://localhost:3000/tasks", { withCredentials: true })
@@ -49,20 +51,21 @@ const Dashboard = ({
         if (response.status !== 200) {
           console.log("error");
         } else {
-          // console.log(response.data.tasks);
-          // console.log(response.data.tasks[0].tags);
           setTasks(response.data.tasks);
         }
       })
       .catch((error) => console.log(error));
-  }, []);
+  };
+  useEffect(loadTasks, []);
 
   return (
-    <div className="m-5">
-      <h1>{welcomeMessage}</h1>
-      <Search {...{ searchProps, setSearchProps }} />
-      <Logout {...{ userDetails, setUserDetails }} />
-      <Tasks {...{ tasks, searchProps }} />
+    <div>
+      <NavigationBar {...{ userDetails, setUserDetails }} />
+      <div className="m-5">
+        <h1>{welcomeMessage}</h1>
+        <Search {...{ searchProps, setSearchProps }} />
+        <Tasks {...{ tasks, searchProps, loadTasks }} />
+      </div>
     </div>
   );
 };
