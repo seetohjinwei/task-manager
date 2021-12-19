@@ -1,7 +1,10 @@
 class TasksController < ApplicationController
   # GET request
   def index
-    @tasks = Task.all.filter{ |t| t[:user_id] == session[:user_id] }
+    @tasks = Task
+              .all
+              .filter{ |t| t[:user_id] == session[:user_id] }
+              .sort_by{ |t| t[:posid] } # sort by posid
     if @tasks
       render json: {
         status: 200,
@@ -38,6 +41,7 @@ class TasksController < ApplicationController
   def create
     user = User.find(session[:user_id])
     task = Task.create!(
+      posid: params["posid"],
       name: params["name"],
       description: params["description"],
       deadline: params["deadline"],
@@ -96,6 +100,6 @@ class TasksController < ApplicationController
   private
 
   def task_params
-    params.require(:task).permit(:name, :description, :tags, :deadline, :isdone, :user)
+    params.require(:task).permit(:posid, :name, :description, :tags, :deadline, :isdone, :user)
   end
 end

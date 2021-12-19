@@ -43,6 +43,7 @@ const addTask = (task, tasks: ITask[], setTasks: React.Dispatch<React.SetStateAc
         const tasksCopy = [...tasks];
         tasksCopy.push(response.data.task);
         setTasks(tasksCopy);
+        console.log(tasksCopy);
       } else {
         console.log("error", response);
       }
@@ -72,7 +73,11 @@ export const TaskAdder = ({
     setTask({ ...task, [event.target.name]: event.target.value });
   };
   const handleSubmit: React.MouseEventHandler<HTMLFormElement> = (event) => {
-    const taskToBeAdded = { ...task, tags: task.tags === "" ? [] : task.tags.split(" ") };
+    const taskToBeAdded = {
+      ...task,
+      posid: tasks.length,
+      tags: task.tags === "" ? [] : task.tags.split(" "),
+    };
     event.preventDefault();
     setShowAddModal(false);
     addTask(taskToBeAdded, tasks, setTasks);
