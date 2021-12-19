@@ -81,7 +81,7 @@ const Dashboard = ({
           </Col>
           <Col className="col-2"></Col>
         </Row>
-        <Tasks {...{ tasks, setTasks, searchProps, loadTasks }} />
+        <Tasks {...{ tasks, setTasks, searchProps }} />
       </div>
     </div>
   );

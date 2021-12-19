@@ -3,23 +3,17 @@ import ITask from "./interfaces/InterfaceTask";
 import Task from "./Task";
 import axios from "axios";
 import React from "react";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-// import Button from "react-bootstrap/Button";
-import Col from "react-bootstrap/Col";
-// import GridLayout from "react-grid-layout"
-// import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
+import { closestCenter, DndContext, DragEndEvent, PointerSensor, useSensor } from "@dnd-kit/core";
+import { arrayMove, rectSortingStrategy, SortableContext } from "@dnd-kit/sortable";
 
 const Tasks = ({
   tasks,
   setTasks,
   searchProps,
-  loadTasks,
 }: {
   tasks: ITask[];
   searchProps: ISearch;
   setTasks: React.Dispatch<React.SetStateAction<ITask[]>>;
-  loadTasks: () => void;
 }) => {
   const searchString: string = searchProps.searchString;
   const searchTerms: string[] = searchString.split(" ");
@@ -49,23 +43,7 @@ const Tasks = ({
 
     return (
       passDisplayDone &&
-      passStrictSearch && (
-        // renders however many tasks on 1 row
-        // TODO: DRAG
-        <Draggable key={task.posid} draggableId={"draggable-" + task.posid} index={index}>
-          {(provided, snapshot) => (
-            <Col
-              ref={provided.innerRef}
-              {...provided.draggableProps}
-              className="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 col-xxl-3"
-              key={index}
-            >
-              <p {...provided.dragHandleProps}>DRAG HERE</p>
-              <Task {...{ task, updateTask, deleteTask }} />
-            </Col>
-          )}
-        </Draggable>
-      )
+      passStrictSearch && <Task key={index} {...{ task, updateTask, deleteTask }} />
     );
   };
 
@@ -110,14 +88,11 @@ const Tasks = ({
           const index: number = tasks.indexOf(task);
           const tasksCopy: ITask[] = [...tasks];
           tasksCopy.splice(index, 1);
-          // decrement posid of everything after deleted task
           for (let i = index; i < tasksCopy.length; i++) {
-            const originalTask = tasksCopy[i];
-            const newTask: ITask = { ...originalTask };
-            newTask.posid--;
-            // don't update state (I think it was causing race condition)
-            // update in one action instead
-            updateTask(originalTask, newTask, false);
+            // decrement posid of everything after deleted task
+            const originalTask: ITask = { ...tasksCopy[i] };
+            tasksCopy[i].posid--;
+            updateTask(originalTask, tasksCopy[i], false);
           }
           setTasks(tasksCopy);
         } else {
@@ -127,20 +102,40 @@ const Tasks = ({
       .catch((error) => console.log("error", error));
   };
 
-  const dragEnd = (result) => {};
+  const sensors = [useSensor(PointerSensor)];
+  const dragEnd = (event: DragEndEvent) => {
+    if (event.active.id !== event.over.id) {
+      const startID = parseInt(event.active.id);
+      const endID = parseInt(event.over.id);
+      const tasksCopy = arrayMove(tasks, startID, endID);
+      for (let i = Math.min(startID, endID); i <= Math.max(startID, endID); i++) {
+        // updating posid of everything affected by the drag
+        const originalTask: ITask = { ...tasksCopy[i] };
+        tasksCopy[i].posid = i;
+        updateTask(originalTask, tasksCopy[i], false);
+      }
+      setTasks(tasksCopy);
+    }
+  };
 
   return (
-    <DragDropContext onDragEnd={dragEnd}>
-      {/* g-3 gutters (spacing between grid elements) */}
-      <Droppable droppableId="droppable">
-        {(provided, snapshot) => (
-          <div ref={provided.innerRef} {...provided.droppableProps}>
-            <Row className="g-3">{tasks.map((task, index) => render(task, index))}</Row>
-            {provided.placeholder}
-          </div>
-        )}
-      </Droppable>
-    </DragDropContext>
+    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={dragEnd}>
+      <SortableContext
+        items={tasks.map((task) => task.posid.toString())}
+        strategy={rectSortingStrategy}
+      >
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: `repeat(4, 1fr)`,
+            gridGap: 10,
+            padding: 10,
+          }}
+        >
+          {tasks.map((task, index) => render(task, index))}
+        </div>
+      </SortableContext>
+    </DndContext>
   );
 };
 
