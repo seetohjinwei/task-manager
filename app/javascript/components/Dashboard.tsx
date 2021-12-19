@@ -1,3 +1,4 @@
+import { checkLoginStatus } from "./Functions/CheckLogin";
 import { TaskAdder } from "./Functions/TaskFunctions";
 import ISearch from "./interfaces/InterfaceSearch";
 import ITask from "./interfaces/InterfaceTask";
@@ -10,16 +11,13 @@ import NavigationBar from "./NavigationBar";
 import Row from "react-bootstrap/Row";
 import Search from "./Search";
 import Tasks from "./Tasks";
+import { useNavigate } from "react-router-dom";
 
 const initSearchProps: ISearch = {
   searchString: "",
   displayDone: true,
   strictSearch: false,
 };
-
-// if ANY of the search string or search tags match, will display the task.
-// search string is case insensitive
-// tags are case sensitive
 
 const Dashboard = ({
   userDetails,
@@ -32,6 +30,7 @@ const Dashboard = ({
   const [searchProps, setSearchProps] = useState<ISearch>(initSearchProps);
   const [welcomeMessage, setWelcomeMessage] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
+  const navigate = useNavigate();
   const welcomeMessages = [
     // prefix + username + postfix
     ["Hello ", "!"],
@@ -43,11 +42,13 @@ const Dashboard = ({
     ["<username>", "</username>"],
     ["You're back, ", "!"],
   ];
+
   useEffect(() => {
     // randomise welcome message on page load (or userDetails change)
     const index = Math.floor(Math.random() * welcomeMessages.length);
     setWelcomeMessage(welcomeMessages[index][0] + userDetails.username + welcomeMessages[index][1]);
   }, [userDetails]);
+
   const loadTasks = () => {
     // fetch tasks from database
     axios
@@ -61,7 +62,16 @@ const Dashboard = ({
       })
       .catch((error) => console.log(error));
   };
-  useEffect(loadTasks, []);
+
+  useEffect(() => {
+    if (!userDetails.loginStatus) {
+      // if loginStatus is true, can assume is directed from login/signup
+      checkLoginStatus(userDetails, setUserDetails, navigate);
+    }
+    // will throw error "Can't perform a React state update on an unmounted component."
+    // but that's because we get re-directed out of /dashboard before loadTasks() can be completed
+    loadTasks();
+  }, []);
 
   return (
     <div>

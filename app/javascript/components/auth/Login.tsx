@@ -79,7 +79,6 @@ const Login = ({
       <Button variant="primary" type="submit">
         Login!
       </Button>
-      {/* align button to right */}
       <Button className="float-end" onClick={toggleLoginSignup} variant="secondary">
         Sign up instead!
       </Button>

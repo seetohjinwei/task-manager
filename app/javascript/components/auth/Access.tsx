@@ -1,7 +1,8 @@
+import { checkLoginStatus } from "../Functions/CheckLogin";
 import IUser from "../interfaces/InterfaceUser";
 import Login from "./Login";
 import Signup from "./Signup";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Alert from "react-bootstrap/Alert";
 
@@ -18,7 +19,6 @@ const Access = ({
   const navigate = useNavigate();
 
   const handleSuccessfulAuth = (user: IUser): void => {
-    // console.log("Handling successful authentication.");
     setUserDetails(user);
     navigate("/dashboard");
   };
@@ -41,6 +41,12 @@ const Access = ({
     setUserDetails({ ...userDetails, username: "", password: "", password_confirmation: "" });
     setShowLogin(!showLogin);
   };
+  useEffect(() => {
+    if (!userDetails.loginStatus) {
+      // timeout to prevent race condition when logging out
+      setTimeout(() => checkLoginStatus(userDetails, setUserDetails, navigate), 500);
+    }
+  }, []);
 
   return (
     // CSS: align center of screen

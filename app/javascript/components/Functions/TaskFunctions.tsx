@@ -22,17 +22,13 @@ export const months = [
 ];
 
 export const formatDateLong = (shortDate: string) => {
-  return shortDate;
-  // intentionally unreachable
-  // const parts: string[] = shortDate.split("-");
-  // return parts[2] + months[parseInt(parts[1])] + parts[0];
+  const parts: string[] = shortDate.split("-");
+  return parts[2] + " " + months[parseInt(parts[1])] + " " + parts[0];
 };
 
 export const formatDateShort = (longDate: string): string => {
-  return longDate;
-  // intentionally unreachable
-  // const parts: string[] = longDate.split(" ");
-  // return parts[2] + "-" + months.indexOf(parts[1]) + "-" + parts[0];
+  const parts: string[] = longDate.split(" ");
+  return parts[2] + "-" + months.indexOf(parts[1]) + "-" + parts[0];
 };
 
 const addTask = (task, tasks: ITask[], setTasks: React.Dispatch<React.SetStateAction<ITask[]>>) => {
@@ -43,7 +39,6 @@ const addTask = (task, tasks: ITask[], setTasks: React.Dispatch<React.SetStateAc
         const tasksCopy = [...tasks];
         tasksCopy.push(response.data.task);
         setTasks(tasksCopy);
-        console.log(tasksCopy);
       } else {
         console.log("error", response);
       }
@@ -62,13 +57,14 @@ export const TaskAdder = ({
   tasks: ITask[];
   setTasks: React.Dispatch<React.SetStateAction<ITask[]>>;
 }) => {
-  const [task, setTask] = useState({
+  const blankTask = {
     name: "",
     description: "",
     tags: "",
     deadline: "",
     isdone: false,
-  });
+  };
+  const [task, setTask] = useState(blankTask);
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     setTask({ ...task, [event.target.name]: event.target.value });
   };
@@ -81,7 +77,9 @@ export const TaskAdder = ({
     event.preventDefault();
     setShowAddModal(false);
     addTask(taskToBeAdded, tasks, setTasks);
+    setTask(blankTask);
   };
+
   return (
     <Modal show={showAddModal} onHide={() => setShowAddModal(false)} backdrop="static">
       <Modal.Header closeButton>

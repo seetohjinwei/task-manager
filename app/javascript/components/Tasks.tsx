@@ -127,7 +127,8 @@ const Tasks = ({
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: `repeat(4, 1fr)`,
+            // dynamically changes how many tasks can fit in 1 row
+            gridTemplateColumns: `repeat(auto-fit, minmax(300px, 1fr))`,
             gridGap: 10,
             padding: 10,
           }}
