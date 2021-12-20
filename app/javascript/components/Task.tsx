@@ -47,22 +47,130 @@ const Task = ({
 }) => {
   const [showTaskModal, setShowTaskModal] = useState(false);
   const TaskModal = () => {
+    // tags is a string (in TaskModal) for easy manipulation
+    const [modalTask, setModalTask] = useState({ ...task, tags: task.tags.join(" ") });
+    const [editTitle, setEditTitle] = useState(false);
+    const [editDescription, setEditDescription] = useState(false);
+    const [editDate, setEditDate] = useState(false);
+    const [editTags, setEditTags] = useState(false);
+    const handleChange: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (
+      event
+    ) => {
+      setModalTask({ ...modalTask, [event.target.name]: event.target.value });
+    };
+    const handleSubmit = () => {
+      const newTask = {
+        id: modalTask.id,
+        name: modalTask.name,
+        description: modalTask.description,
+        tags: modalTask.tags ? modalTask.tags.split(" ") : [],
+        deadline: modalTask.deadline,
+        isdone: modalTask.isdone,
+      };
+      setShowTaskModal(false);
+      updateTask(task, newTask);
+    };
     return (
-      <Modal show={showTaskModal} onHide={() => setShowTaskModal(false)} backdrop="static">
+      <Modal
+        show={showTaskModal}
+        onHide={() => setShowTaskModal(false)}
+        backdrop="static"
+        className={modalTask.isdone ? "text-muted" : ""}
+      >
         <Modal.Header closeButton>
-          <Modal.Title>{task.name}</Modal.Title>
+          <Modal.Title>
+            {editTitle ? (
+              <input
+                type="text"
+                name="name"
+                placeholder="Task Name"
+                value={modalTask.name}
+                onChange={handleChange}
+                onBlur={() => setEditTitle(false)}
+                autoFocus
+              />
+            ) : (
+              <div onClick={() => setEditTitle(true)}>{modalTask.name}</div>
+            )}
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p>{task.description}</p>
-          {task.deadline && <p className="text-muted">{formatDateLong(task.deadline)}</p>}
-          {task.tags.length !== 0 && <p>{task.tags.map((item) => "#" + item).join(" ")}</p>}
+          {editDescription ? (
+            <textarea
+              name="description"
+              className="w-100 mb-3"
+              placeholder="Description"
+              value={modalTask.description}
+              onChange={handleChange}
+              onBlur={() => setEditDescription(false)}
+              autoFocus
+            />
+          ) : (
+            <div
+              className="mb-3"
+              style={{ whiteSpace: "pre-line" }}
+              onClick={() => setEditDescription(true)}
+            >
+              {modalTask.description ? (
+                modalTask.description
+              ) : (
+                <i>Click here to add a description.</i>
+              )}
+            </div>
+          )}
+          {editDate ? (
+            <input
+              type="date"
+              name="deadline"
+              placeholder="Deadline"
+              value={modalTask.deadline}
+              onChange={handleChange}
+              onBlur={() => setEditDate(false)}
+              className="mb-3"
+              autoFocus
+            />
+          ) : (
+            <div className="text-muted mb-3" onClick={() => setEditDate(true)}>
+              {modalTask.deadline ? (
+                formatDateLong(modalTask.deadline)
+              ) : (
+                <i>Click here to add a deadline.</i>
+              )}
+            </div>
+          )}
+          {editTags ? (
+            <input
+              type="text"
+              name="tags"
+              placeholder="tag1 tag2 tag3"
+              value={modalTask.tags}
+              onChange={handleChange}
+              onBlur={() => setEditTags(false)}
+              className="mb-3"
+              autoFocus
+            />
+          ) : (
+            <div className="mb-3" onClick={() => setEditTags(true)}>
+              {modalTask.tags.length !== 0 ? (
+                <p>
+                  {modalTask.tags
+                    .split(" ")
+                    .map((item) => "#" + item)
+                    .join(" ")}
+                </p>
+              ) : (
+                <i>Click here to add tags.</i>
+              )}
+            </div>
+          )}
         </Modal.Body>
         <Modal.Footer>
-          <Button>Save</Button>
+          <Button onClick={handleSubmit}>Save</Button>
         </Modal.Footer>
       </Modal>
     );
   };
+
   const handleToggleDone = () => {
     const updatedTask = { ...task, isdone: !task.isdone };
     updateTask(task, updatedTask);
