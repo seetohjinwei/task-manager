@@ -12,6 +12,9 @@ const initUser: IUser = {
   password: "",
   password_confirmation: "",
   authenticationErrors: "",
+  display_done: true,
+  strict_search: false,
+  sort_method: "default",
 };
 
 const App = () => {

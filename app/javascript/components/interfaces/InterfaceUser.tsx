@@ -4,4 +4,9 @@ export default interface IUser {
   password: string;
   password_confirmation: string;
   authenticationErrors: string;
+  // display_done: hides "done" tasks
+  display_done: boolean;
+  // strict_search: matches for ALL search terms
+  strict_search: boolean;
+  sort_method: "default" | "deadline" | "alphabetical";
 }

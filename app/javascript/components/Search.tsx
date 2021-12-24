@@ -1,20 +1,25 @@
-import ISearch from "./interfaces/InterfaceSearch";
+import IUser from "./interfaces/InterfaceUser";
 import React from "react";
 import Form from "react-bootstrap/Form";
 
 // renders the search box
 const Search = ({
-  searchProps,
-  setSearchProps,
+  searchString,
+  setSearchString,
+  userDetails,
+  setUserDetails,
 }: {
-  searchProps: ISearch;
-  setSearchProps: React.Dispatch<React.SetStateAction<ISearch>>;
+  searchString: string;
+  setSearchString: React.Dispatch<React.SetStateAction<string>>;
+  userDetails: IUser;
+  setUserDetails: React.Dispatch<React.SetStateAction<IUser>>;
 }) => {
   const handleOnChangeCheckbox: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-    setSearchProps({ ...searchProps, [event.target.name]: event.target.checked });
+    // TODO: modify in database
+    setUserDetails({ ...userDetails, [event.target.name]: event.target.checked });
   };
   const handleOnChangeString: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-    setSearchProps({ ...searchProps, [event.target.name]: event.target.value });
+    setSearchString(event.target.value);
   };
 
   return (
@@ -25,7 +30,7 @@ const Search = ({
             type="text"
             name="searchString"
             placeholder="Search..."
-            value={searchProps.searchString}
+            value={searchString}
             onChange={handleOnChangeString}
           ></Form.Control>
         </Form.Group>
@@ -34,7 +39,7 @@ const Search = ({
           type="switch"
           label="Show Finished Tasks"
           name="displayDone"
-          checked={searchProps.displayDone}
+          checked={userDetails.display_done}
           onChange={handleOnChangeCheckbox}
         />
         <Form.Check
@@ -42,7 +47,7 @@ const Search = ({
           type="switch"
           label="Match All Search Terms"
           name="strictSearch"
-          checked={searchProps.strictSearch}
+          checked={userDetails.strict_search}
           onChange={handleOnChangeCheckbox}
         />
       </Form>

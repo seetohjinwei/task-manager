@@ -3,7 +3,10 @@ class RegistrationsController < ApplicationController
     user = User.create!(
       username: params["username"],
       password: params["password"],
-      password_confirmation: params["password_confirmation"]
+      password_confirmation: params["password_confirmation"],
+      display_done: true,
+      strict_search: false,
+      sort_method: "default"
     )
     if user
       session[:user_id] = user.id
