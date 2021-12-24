@@ -33,7 +33,7 @@ export const formatDateShort = (longDate: string): string => {
 
 const addTask = (task, tasks: ITask[], setTasks: React.Dispatch<React.SetStateAction<ITask[]>>) => {
   axios
-    .post("http://localhost:3000/tasks", task, { withCredentials: true })
+    .post("https://jinwei-task-manager.herokuapp.com/tasks", task, { withCredentials: true })
     .then((response) => {
       if (response.status === 200) {
         const tasksCopy = [...tasks];

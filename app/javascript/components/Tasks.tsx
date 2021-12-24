@@ -64,7 +64,9 @@ const Tasks = ({
     const { posid, name, description, tags, deadline, isdone, ...rest } = newTask;
     const subsetTask = { posid, name, description, tags, deadline, isdone };
     axios
-      .patch(`http://localhost:3000/tasks/${newTask.id}`, subsetTask, { withCredentials: true })
+      .patch(`https://jinwei-task-manager.herokuapp.com/tasks/${newTask.id}`, subsetTask, {
+        withCredentials: true,
+      })
       .then((response) => {
         if (response.status === 200) {
           if (updateState) {
@@ -82,7 +84,9 @@ const Tasks = ({
 
   const deleteTask = (task: ITask) => {
     axios
-      .delete(`http://localhost:3000/tasks/${task.id}`, { withCredentials: true })
+      .delete(`https://jinwei-task-manager.herokuapp.com/tasks/${task.id}`, {
+        withCredentials: true,
+      })
       .then((response) => {
         if (response.status === 200) {
           const index: number = tasks.indexOf(task);

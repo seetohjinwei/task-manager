@@ -35,7 +35,9 @@ const Signup = ({
       password_confirmation: userDetails.password_confirmation,
     };
     axios
-      .post("http://localhost:3000/registrations", user, { withCredentials: true })
+      .post("https://jinwei-task-manager.herokuapp.com/registrations", user, {
+        withCredentials: true,
+      })
       .then((response) => {
         if (response.status === 200) {
           handleSuccessfulAuth({

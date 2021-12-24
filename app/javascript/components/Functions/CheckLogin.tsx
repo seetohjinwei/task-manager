@@ -8,7 +8,7 @@ export const checkLoginStatus = (
   navigate: NavigateFunction
 ) => {
   return axios
-    .get("http://localhost:3000/logged_in", { withCredentials: true })
+    .get("https://jinwei-task-manager.herokuapp.com/logged_in", { withCredentials: true })
     .then((response) => {
       if (response.data.logged_in) {
         setUserDetails({

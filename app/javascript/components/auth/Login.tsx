@@ -31,7 +31,7 @@ const Login = ({
       password: userDetails.password,
     };
     axios
-      .post("http://localhost:3000/sessions", user, { withCredentials: true })
+      .post("https://jinwei-task-manager.herokuapp.com/sessions", user, { withCredentials: true })
       .then((response) => {
         if (response.status === 200) {
           handleSuccessfulAuth({

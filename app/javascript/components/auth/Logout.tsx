@@ -14,7 +14,7 @@ const Logout = ({
   const navigate = useNavigate();
   const handleLogout: React.MouseEventHandler<HTMLButtonElement> = (event) => {
     axios
-      .delete("http://localhost:3000/logout", { withCredentials: true })
+      .delete("https://jinwei-task-manager.herokuapp.com/logout", { withCredentials: true })
       .then()
       .catch((error) => console.log("failed to logout", error));
     setUserDetails({

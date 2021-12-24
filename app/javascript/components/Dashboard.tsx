@@ -52,7 +52,7 @@ const Dashboard = ({
   const loadTasks = () => {
     // fetch tasks from database
     axios
-      .get("http://localhost:3000/tasks", { withCredentials: true })
+      .get("https://jinwei-task-manager.herokuapp.com/tasks", { withCredentials: true })
       .then((response) => {
         if (response.status !== 200) {
           console.log("error");
