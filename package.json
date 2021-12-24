@@ -2,11 +2,13 @@
   "name": "task-manager",
   "private": true,
   "dependencies": {
+    "@babel/core": "^7.16.5",
     "@babel/preset-react": "^7.16.0",
     "@babel/preset-typescript": "^7.16.0",
     "@dnd-kit/core": "^4.0.3",
     "@dnd-kit/sortable": "^5.1.0",
     "@dnd-kit/utilities": "^3.0.2",
+    "@popperjs/core": "2.10.2",
     "@rails/actioncable": "^6.0.0",
     "@rails/activestorage": "^6.0.0",
     "@rails/ujs": "^6.0.0",
