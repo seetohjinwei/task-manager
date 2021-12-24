@@ -30,6 +30,7 @@ const Task = ({
   task,
   updateTask,
   deleteTask,
+  draggable,
 }: {
   task: ITask;
   updateTask: (
@@ -44,6 +45,7 @@ const Task = ({
     }
   ) => void;
   deleteTask: (task: ITask) => void;
+  draggable: boolean;
 }) => {
   const [showTaskModal, setShowTaskModal] = useState(false);
   const TaskModal = () => {
@@ -192,11 +194,13 @@ const Task = ({
     // deadline and tags render only if not empty
     <div style={style}>
       <div className="text-center">
-        <div className="d-inline-block" ref={setNodeRef} {...attributes} {...listeners}>
-          <DragHandle />
-          <DragHandle />
-          <DragHandle />
-        </div>
+        {draggable && (
+          <div className="d-inline-block" ref={setNodeRef} {...attributes} {...listeners}>
+            <DragHandle />
+            <DragHandle />
+            <DragHandle />
+          </div>
+        )}
       </div>
       <TaskModal />
       <Card

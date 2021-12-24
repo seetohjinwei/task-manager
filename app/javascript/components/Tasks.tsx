@@ -2,7 +2,7 @@ import ISearch from "./interfaces/InterfaceSearch";
 import ITask from "./interfaces/InterfaceTask";
 import Task from "./Task";
 import axios from "axios";
-import React from "react";
+import React, { useState } from "react";
 import { closestCenter, DndContext, DragEndEvent, PointerSensor, useSensor } from "@dnd-kit/core";
 import { arrayMove, rectSortingStrategy, SortableContext } from "@dnd-kit/sortable";
 
@@ -10,10 +10,12 @@ const Tasks = ({
   tasks,
   setTasks,
   searchProps,
+  sortMethod,
 }: {
   tasks: ITask[];
   searchProps: ISearch;
   setTasks: React.Dispatch<React.SetStateAction<ITask[]>>;
+  sortMethod: "default" | "deadline" | "alphabetical";
 }) => {
   const searchString: string = searchProps.searchString;
   const searchTerms: string[] = searchString.split(" ");
@@ -41,9 +43,11 @@ const Tasks = ({
       ? searchTerms.every((searchParam) => matchParam(searchParam, true))
       : searchTerms.some((searchParam) => matchParam(searchParam, false));
 
+    const draggable = sortMethod === "default";
+
     return (
       passDisplayDone &&
-      passStrictSearch && <Task key={index} {...{ task, updateTask, deleteTask }} />
+      passStrictSearch && <Task key={index} {...{ task, updateTask, deleteTask, draggable }} />
     );
   };
 
@@ -122,26 +126,59 @@ const Tasks = ({
     }
   };
 
-  return (
-    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={dragEnd}>
-      <SortableContext
-        items={tasks.map((task) => task.posid.toString())}
-        strategy={rectSortingStrategy}
+  const gridOfTasks = (tasks: ITask[]) => {
+    return (
+      <div
+        style={{
+          display: "grid",
+          // dynamically changes how many tasks can fit in 1 row
+          gridTemplateColumns: `repeat(auto-fit, minmax(300px, 1fr))`,
+          gridGap: 10,
+          padding: 10,
+        }}
       >
-        <div
-          style={{
-            display: "grid",
-            // dynamically changes how many tasks can fit in 1 row
-            gridTemplateColumns: `repeat(auto-fit, minmax(300px, 1fr))`,
-            gridGap: 10,
-            padding: 10,
-          }}
+        {tasks.map((task, index) => render(task, index))}
+      </div>
+    );
+  };
+
+  if (sortMethod === "default") {
+    return (
+      <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={dragEnd}>
+        <SortableContext
+          items={tasks.map((task) => task.posid.toString())}
+          strategy={rectSortingStrategy}
         >
-          {tasks.map((task, index) => render(task, index))}
-        </div>
-      </SortableContext>
-    </DndContext>
-  );
+          {gridOfTasks(tasks)}
+        </SortableContext>
+      </DndContext>
+    );
+  } else if (sortMethod === "deadline") {
+    return gridOfTasks(
+      [...tasks].sort((a, b) => {
+        // if a task has no deadline, it always appears at the back
+        if (b.deadline === "") {
+          return -1;
+        } else if (a.deadline === "") {
+          return 1;
+        } else {
+          // workaround because browsers lets you key in more than 4 digits for year
+          // Firefox can do 5, Chrome/Safari can do 6, this workaround works for 8 digit years.
+          if (a.deadline.length > 10) {
+            console.log(`Didn't know this site would be used in ${a.deadline.split("-")[0]}!`);
+          }
+          const deadlineA = a.deadline.padStart(14, "0");
+          const deadlineB = b.deadline.padStart(14, "0");
+          return deadlineA.localeCompare(deadlineB);
+        }
+      })
+    );
+  } else if (sortMethod === "alphabetical") {
+    return gridOfTasks([...tasks].sort((a, b) => a.name.localeCompare(b.name)));
+  } else {
+    console.log("inavlid sortMethod");
+    return null;
+  }
 };
 
 export default Tasks;

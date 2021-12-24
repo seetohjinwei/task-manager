@@ -7,6 +7,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
+import Dropdown from "react-bootstrap/Dropdown";
+import DropdownButton from "react-bootstrap/DropdownButton";
 import NavigationBar from "./NavigationBar";
 import Row from "react-bootstrap/Row";
 import Search from "./Search";
@@ -30,6 +32,7 @@ const Dashboard = ({
   const [searchProps, setSearchProps] = useState<ISearch>(initSearchProps);
   const [welcomeMessage, setWelcomeMessage] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
+  const [sortMethod, setSortMethod] = useState<"default" | "deadline" | "alphabetical">("default");
   const navigate = useNavigate();
   const welcomeMessages = [
     // prefix + username + postfix
@@ -89,13 +92,20 @@ const Dashboard = ({
             <Search {...{ searchProps, setSearchProps }} />
           </Col>
           <Col>
-            <Button className="float-end" onClick={() => setShowAddModal(true)}>
+            <DropdownButton className="float-end m-1" title={"Sorting by: " + sortMethod}>
+              <Dropdown.Item onClick={() => setSortMethod("default")}>Default</Dropdown.Item>
+              <Dropdown.Item onClick={() => setSortMethod("deadline")}>Deadline</Dropdown.Item>
+              <Dropdown.Item onClick={() => setSortMethod("alphabetical")}>
+                Alphabetical
+              </Dropdown.Item>
+            </DropdownButton>
+            <Button className="float-end m-1" onClick={() => setShowAddModal(true)}>
               Add Task
             </Button>
           </Col>
           <Col className="col-2"></Col>
         </Row>
-        <Tasks {...{ tasks, setTasks, searchProps }} />
+        <Tasks {...{ tasks, setTasks, searchProps, sortMethod }} />
       </div>
     </div>
   );
