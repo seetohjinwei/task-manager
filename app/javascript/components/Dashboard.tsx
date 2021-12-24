@@ -44,9 +44,13 @@ const Dashboard = ({
   ];
 
   useEffect(() => {
-    // randomise welcome message on page load (or userDetails change)
-    const index = Math.floor(Math.random() * welcomeMessages.length);
-    setWelcomeMessage(welcomeMessages[index][0] + userDetails.username + welcomeMessages[index][1]);
+    if (userDetails.username) {
+      // randomise welcome message when username is detected
+      const index = Math.floor(Math.random() * welcomeMessages.length);
+      setWelcomeMessage(
+        welcomeMessages[index][0] + userDetails.username + welcomeMessages[index][1]
+      );
+    }
   }, [userDetails]);
 
   const loadTasks = () => {

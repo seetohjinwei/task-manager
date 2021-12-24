@@ -1,24 +1,9 @@
-# README
+# Task Manager
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Yet another task manager, built with React and Ruby on Rails.
 
-Things you may want to cover:
+Sign up for an account and manage your tasks.
 
-* Ruby version
+More details -- <a href="/">User Guide (in-progress)</a>
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+<a href="https://jinwei-task-manager.herokuapp.com/">Link to Task Manager</a>
