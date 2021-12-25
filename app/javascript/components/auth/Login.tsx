@@ -34,11 +34,12 @@ const Login = ({
       .post("https://jinwei-task-manager.herokuapp.com/sessions", user, { withCredentials: true })
       .then((response) => {
         if (response.status === 200) {
+          const user = response.data.user;
           handleSuccessfulAuth({
             ...user,
             password_confirmation: user.password,
-            loginStatus: true,
-            authenticationErrors: userDetails.authenticationErrors,
+            login_status: true,
+            authentication_errors: userDetails.authentication_errors,
           });
         } else {
           // render registration error
@@ -62,6 +63,7 @@ const Login = ({
           placeholder="Username"
           value={userDetails.username}
           onChange={handleChange}
+          minLength={5}
           required
         />
       </Form.Group>
@@ -73,6 +75,7 @@ const Login = ({
           placeholder="Password"
           value={userDetails.password}
           onChange={handleChange}
+          minLength={6}
           required
         />
       </Form.Group>

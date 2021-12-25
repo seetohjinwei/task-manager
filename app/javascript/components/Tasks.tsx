@@ -1,23 +1,24 @@
-import ISearch from "./interfaces/InterfaceSearch";
 import ITask from "./interfaces/InterfaceTask";
 import Task from "./Task";
 import axios from "axios";
-import React, { useState } from "react";
+import React from "react";
 import { closestCenter, DndContext, DragEndEvent, PointerSensor, useSensor } from "@dnd-kit/core";
 import { arrayMove, rectSortingStrategy, SortableContext } from "@dnd-kit/sortable";
+import IUser from "./interfaces/InterfaceUser";
 
 const Tasks = ({
   tasks,
   setTasks,
-  searchProps,
-  sortMethod,
+  searchString,
+  userDetails,
+  setUserDetails,
 }: {
   tasks: ITask[];
-  searchProps: ISearch;
+  searchString: string;
   setTasks: React.Dispatch<React.SetStateAction<ITask[]>>;
-  sortMethod: "default" | "deadline" | "alphabetical";
+  userDetails: IUser;
+  setUserDetails: React.Dispatch<React.SetStateAction<IUser>>;
 }) => {
-  const searchString: string = searchProps.searchString;
   const searchTerms: string[] = searchString.split(" ");
 
   const render = (task: ITask, index: number) => {
@@ -38,12 +39,12 @@ const Tasks = ({
       }
     };
 
-    const passDisplayDone: boolean = searchProps.displayDone || !task.isdone;
-    const passStrictSearch: boolean = searchProps.strictSearch
+    const passDisplayDone: boolean = userDetails.display_done || !task.isdone;
+    const passStrictSearch: boolean = userDetails.strict_search
       ? searchTerms.every((searchParam) => matchParam(searchParam, true))
       : searchTerms.some((searchParam) => matchParam(searchParam, false));
 
-    const draggable = sortMethod === "default";
+    const draggable = userDetails.sort_method === "default";
 
     return (
       passDisplayDone &&
@@ -142,7 +143,7 @@ const Tasks = ({
     );
   };
 
-  if (sortMethod === "default") {
+  if (userDetails.sort_method === "default") {
     return (
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={dragEnd}>
         <SortableContext
@@ -153,7 +154,7 @@ const Tasks = ({
         </SortableContext>
       </DndContext>
     );
-  } else if (sortMethod === "deadline") {
+  } else if (userDetails.sort_method === "deadline") {
     return gridOfTasks(
       [...tasks].sort((a, b) => {
         // if a task has no deadline, it always appears at the back
@@ -173,10 +174,10 @@ const Tasks = ({
         }
       })
     );
-  } else if (sortMethod === "alphabetical") {
+  } else if (userDetails.sort_method === "alphabetical") {
     return gridOfTasks([...tasks].sort((a, b) => a.name.localeCompare(b.name)));
   } else {
-    console.log("inavlid sortMethod");
+    console.log("invalid sortMethod", userDetails);
     return null;
   }
 };

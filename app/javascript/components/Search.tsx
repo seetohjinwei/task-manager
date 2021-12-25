@@ -14,12 +14,11 @@ const Search = ({
   userDetails: IUser;
   setUserDetails: React.Dispatch<React.SetStateAction<IUser>>;
 }) => {
-  const handleOnChangeCheckbox: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-    // TODO: modify in database
-    setUserDetails({ ...userDetails, [event.target.name]: event.target.checked });
-  };
   const handleOnChangeString: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     setSearchString(event.target.value);
+  };
+  const handleOnChangeCheckbox: React.ChangeEventHandler<HTMLInputElement> = (event) => {
+    setUserDetails({ ...userDetails, [event.target.name]: event.target.checked });
   };
 
   return (
@@ -38,7 +37,7 @@ const Search = ({
           inline
           type="switch"
           label="Show Finished Tasks"
-          name="displayDone"
+          name="display_done"
           checked={userDetails.display_done}
           onChange={handleOnChangeCheckbox}
         />
@@ -46,7 +45,7 @@ const Search = ({
           inline
           type="switch"
           label="Match All Search Terms"
-          name="strictSearch"
+          name="strict_search"
           checked={userDetails.strict_search}
           onChange={handleOnChangeCheckbox}
         />

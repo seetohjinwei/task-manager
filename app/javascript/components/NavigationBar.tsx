@@ -1,7 +1,7 @@
 import IUser from "./interfaces/InterfaceUser";
 import Logout from "./auth/Logout";
 import React from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
@@ -19,12 +19,12 @@ const NavigationBar = ({
       <Container>
         <Navbar.Brand>Task Manager</Navbar.Brand>
         <Nav>
-          <Link to="/dashboard" className="nav-link">
+          <NavLink to="/dashboard" className="nav-link">
             Dashboard
-          </Link>
-          <Link to="/" className="nav-link">
-            Placeholder
-          </Link>
+          </NavLink>
+          <NavLink to="/settings" className="nav-link">
+            Settings
+          </NavLink>
           <Logout {...{ userDetails, setUserDetails }}></Logout>
         </Nav>
       </Container>

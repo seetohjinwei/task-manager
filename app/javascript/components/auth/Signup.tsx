@@ -40,10 +40,11 @@ const Signup = ({
       })
       .then((response) => {
         if (response.status === 200) {
+          const user = response.data.user;
           handleSuccessfulAuth({
             ...user,
-            loginStatus: true,
-            authenticationErrors: userDetails.authenticationErrors,
+            login_status: true,
+            authentication_errors: userDetails.authentication_errors,
           });
         } else {
           // render registration error
@@ -67,6 +68,7 @@ const Signup = ({
           placeholder="Username"
           value={userDetails.username}
           onChange={handleChange}
+          minLength={5}
           required
         />
         <Form.Text muted>Username must be at least 5 characters long.</Form.Text>
@@ -79,6 +81,7 @@ const Signup = ({
           placeholder="Password"
           value={userDetails.password}
           onChange={handleChange}
+          minLength={6}
           required
         />
         <Form.Text muted>Passwords must be at least 6 characters long.</Form.Text>
@@ -91,6 +94,7 @@ const Signup = ({
           placeholder="Confirm Password"
           value={userDetails.password_confirmation}
           onChange={handleChange}
+          minLength={6}
           required
         />
         {userDetails.password_confirmation &&

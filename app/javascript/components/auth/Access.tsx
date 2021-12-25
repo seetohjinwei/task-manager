@@ -29,11 +29,7 @@ const Access = ({
 
   const displayError = (errorMessage: string): void => {
     setShowError(true);
-    setUserDetails({ ...userDetails, authenticationErrors: errorMessage });
-  };
-
-  const hideError = () => {
-    setShowError(false);
+    setUserDetails({ ...userDetails, authentication_errors: errorMessage });
   };
 
   const toggleLoginSignup = () => {
@@ -42,9 +38,9 @@ const Access = ({
     setShowLogin(!showLogin);
   };
   useEffect(() => {
-    if (!userDetails.loginStatus) {
+    if (!userDetails.login_status) {
       // timeout to prevent race condition when logging out
-      setTimeout(() => checkLoginStatus(userDetails, setUserDetails, navigate), 500);
+      setTimeout(() => checkLoginStatus(userDetails, setUserDetails, navigate, "/dashboard"), 500);
     }
   }, []);
 
@@ -76,8 +72,8 @@ const Access = ({
       </div>
       <div className="d-flex justify-content-center align-items-center mt-3">
         {showError && (
-          <Alert variant="warning" onClose={hideError} dismissible>
-            {userDetails.authenticationErrors}
+          <Alert variant="warning" onClose={() => setShowError(false)} dismissible>
+            {userDetails.authentication_errors}
           </Alert>
         )}
       </div>

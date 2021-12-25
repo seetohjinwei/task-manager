@@ -3,4 +3,6 @@ class HomepageController < ApplicationController
   end
   def dashboard
   end
+  def settings
+  end
 end

@@ -19,7 +19,7 @@ const Logout = ({
       .catch((error) => console.log("failed to logout", error));
     setUserDetails({
       ...userDetails,
-      loginStatus: false,
+      login_status: false,
       username: "",
       password: "",
       password_confirmation: "",
@@ -27,7 +27,7 @@ const Logout = ({
     navigate("/");
   };
   return (
-    <Button variant="dark" onClick={handleLogout}>
+    <Button variant="dark" className="text-muted" onClick={handleLogout}>
       Logout
     </Button>
   );
