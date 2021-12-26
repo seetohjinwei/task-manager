@@ -17,8 +17,10 @@ const Login = ({
   displayError: (errorMessage: string) => void;
   toggleLoginSignup: () => void;
 }) => {
+  /** Handles form submission. */
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
+    // Double checks username and password lengths, even though HTML already prevents it.
     if (userDetails.username.length < 5) {
       displayError("Might wanna check your username. (It's too short.)");
       return;
@@ -33,18 +35,13 @@ const Login = ({
     axios
       .post("https://jinwei-task-manager.herokuapp.com/sessions", user, { withCredentials: true })
       .then((response) => {
-        if (response.status === 200) {
-          const user = response.data.user;
-          handleSuccessfulAuth({
-            ...user,
-            password_confirmation: user.password,
-            login_status: true,
-            authentication_errors: userDetails.authentication_errors,
-          });
-        } else {
-          // render registration error
-          displayError("Wrong username or password.");
-        }
+        const user = response.data.user;
+        handleSuccessfulAuth({
+          ...user,
+          password_confirmation: user.password,
+          login_status: true,
+          authentication_errors: userDetails.authentication_errors,
+        });
       })
       .catch((error) => {
         // error thrown from database

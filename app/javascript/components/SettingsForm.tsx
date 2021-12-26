@@ -7,6 +7,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import Form from "react-bootstrap/Form";
 
+/** Settings Form within /settings */
 const SettingsForm = ({
   userDetails,
   setUserDetails,
@@ -25,19 +26,25 @@ const SettingsForm = ({
     password_confirmation: "",
   });
   const [showError, setShowError] = useState(false);
+
+  /** Takes in a message and displays the message. */
   const displayError = (message: string) => {
     setShowError(true);
     setUserDetails({ ...userDetails, authentication_errors: message });
   };
+  /** Handles search options change. */
   const handleOptionsChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     setOptionsForm({ ...optionsForm, [event.target.name]: event.target.checked });
   };
+  /** Handles sort method change. */
   const handleSortMethodChange = (method: IUser["sort_method"]) => {
     setOptionsForm({ ...optionsForm, sort_method: method });
   };
+  /** Handles password form change. */
   const handlePasswordChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     setPasswordForm({ ...passwordForm, [event.target.name]: event.target.value });
   };
+  /** Handles options form submission. */
   const handleOptionsSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
     axios
@@ -55,10 +62,11 @@ const SettingsForm = ({
         displayError("Changed Successfully!");
       })
       .catch((error) => {
-        displayError("Something went wrong...");
+        displayError("Something went wrong... You may want to try again in a bit.");
         console.log(error);
       });
   };
+  /** Handles password form submission. */
   const handlePasswordSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
     if (passwordForm.password !== passwordForm.password_confirmation) {
@@ -79,15 +87,16 @@ const SettingsForm = ({
           displayError("Changed Successfully!");
         })
         .catch((error) => {
-          console.log(error);
           displayError("Wrong Password!");
+          console.log(error);
         });
     }
   };
   return (
     <div>
-      <div className="d-flex my-3" style={{ display: "flex", justifyContent: "space-between" }}>
-        <Form onSubmit={handleOptionsSubmit}>
+      {/* Forms render side-by-side unless screen is small. */}
+      <div className="d-flex" style={{ justifyContent: "space-between", flexWrap: "wrap" }}>
+        <Form className="my-3" onSubmit={handleOptionsSubmit}>
           <Form.Group className="my-3">
             <h2>Change Default Search Options</h2>
             <DropdownButton
@@ -124,7 +133,7 @@ const SettingsForm = ({
             Save Changes
           </Button>
         </Form>
-        <Form onSubmit={handlePasswordSubmit}>
+        <Form className="my-3" onSubmit={handlePasswordSubmit}>
           <h2>Change Account Password</h2>
           <Form.Group className="mb-3">
             <Form.Label>Old Password</Form.Label>

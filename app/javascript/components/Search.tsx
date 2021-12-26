@@ -2,7 +2,7 @@ import IUser from "./interfaces/InterfaceUser";
 import React from "react";
 import Form from "react-bootstrap/Form";
 
-// renders the search box
+/** Renders the search box and search options. */
 const Search = ({
   searchString,
   setSearchString,
@@ -14,9 +14,11 @@ const Search = ({
   userDetails: IUser;
   setUserDetails: React.Dispatch<React.SetStateAction<IUser>>;
 }) => {
+  /** Handles Search String Change */
   const handleOnChangeString: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     setSearchString(event.target.value);
   };
+  /** Handles Search Option Change */
   const handleOnChangeCheckbox: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     setUserDetails({ ...userDetails, [event.target.name]: event.target.checked });
   };

@@ -7,6 +7,7 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import { useNavigate } from "react-router-dom";
 
+/** Page for /settings */
 const Settings = ({
   userDetails,
   setUserDetails,
@@ -17,7 +18,7 @@ const Settings = ({
   const navigate = useNavigate();
   useEffect(() => {
     if (!userDetails.login_status) {
-      // if loginStatus is true, can assume is directed from login/signup/dashboard
+      // loginStatus is true means that user was re-directed here, as opposed to navigating from URL manually.
       checkLoginStatus(userDetails, setUserDetails, navigate, "/settings");
     }
   }, []);

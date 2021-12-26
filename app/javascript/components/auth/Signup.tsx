@@ -17,8 +17,10 @@ const Signup = ({
   displayError: (errorMessage: string) => void;
   toggleLoginSignup: () => void;
 }) => {
+  /** Handles form submission. */
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
+    // Double checks username and password lengths, even though HTML already prevents it.
     if (userDetails.username.length < 5) {
       displayError("Username is required to have at least 5 characters.");
       return;
@@ -39,17 +41,12 @@ const Signup = ({
         withCredentials: true,
       })
       .then((response) => {
-        if (response.status === 200) {
-          const user = response.data.user;
-          handleSuccessfulAuth({
-            ...user,
-            login_status: true,
-            authentication_errors: userDetails.authentication_errors,
-          });
-        } else {
-          // render registration error
-          displayError("Username already exists.");
-        }
+        const user = response.data.user;
+        handleSuccessfulAuth({
+          ...user,
+          login_status: true,
+          authentication_errors: userDetails.authentication_errors,
+        });
       })
       .catch((error) => {
         // error thrown from database
@@ -97,6 +94,7 @@ const Signup = ({
           minLength={6}
           required
         />
+        {/* Popup alerting user that passwords do not match. */}
         {userDetails.password_confirmation &&
           userDetails.password !== userDetails.password_confirmation && (
             <Form.Text muted>Passwords do not match.</Form.Text>

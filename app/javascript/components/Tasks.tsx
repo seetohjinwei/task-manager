@@ -1,27 +1,34 @@
 import ITask from "./interfaces/InterfaceTask";
+import IUser from "./interfaces/InterfaceUser";
 import Task from "./Task";
 import axios from "axios";
-import React from "react";
-import { closestCenter, DndContext, DragEndEvent, PointerSensor, useSensor } from "@dnd-kit/core";
+import {
+  closestCenter,
+  DndContext,
+  DragEndEvent,
+  PointerSensor,
+  TouchSensor,
+  useSensor,
+} from "@dnd-kit/core";
 import { arrayMove, rectSortingStrategy, SortableContext } from "@dnd-kit/sortable";
-import IUser from "./interfaces/InterfaceUser";
+import React from "react";
 
 const Tasks = ({
   tasks,
   setTasks,
   searchString,
   userDetails,
-  setUserDetails,
 }: {
   tasks: ITask[];
   searchString: string;
   setTasks: React.Dispatch<React.SetStateAction<ITask[]>>;
   userDetails: IUser;
-  setUserDetails: React.Dispatch<React.SetStateAction<IUser>>;
 }) => {
   const searchTerms: string[] = searchString.split(" ");
 
+  /** Responsible for deciding if a task is to be rendered. */
   const render = (task: ITask, index: number) => {
+    /** Checks if task matches a parameter. */
     const matchParam = (searchParam: string, strict: boolean): boolean => {
       if (strict && searchString !== "" && searchParam === "") {
         // if strict search ON
@@ -52,6 +59,7 @@ const Tasks = ({
     );
   };
 
+  /** Updates task in database and in local state. */
   const updateTask = (
     originalTask: ITask,
     newTask: {
@@ -73,15 +81,11 @@ const Tasks = ({
         withCredentials: true,
       })
       .then((response) => {
-        if (response.status === 200) {
-          if (updateState) {
-            const index: number = tasks.indexOf(originalTask);
-            const tasksCopy: ITask[] = [...tasks];
-            tasksCopy[index] = response.data.task;
-            setTasks(tasksCopy);
-          }
-        } else {
-          console.log("error!", response);
+        if (updateState) {
+          const index: number = tasks.indexOf(originalTask);
+          const tasksCopy: ITask[] = [...tasks];
+          tasksCopy[index] = response.data.task;
+          setTasks(tasksCopy);
         }
       })
       .catch((error) => console.log("error", error));
@@ -93,25 +97,23 @@ const Tasks = ({
         withCredentials: true,
       })
       .then((response) => {
-        if (response.status === 200) {
-          const index: number = tasks.indexOf(task);
-          const tasksCopy: ITask[] = [...tasks];
-          tasksCopy.splice(index, 1);
-          for (let i = index; i < tasksCopy.length; i++) {
-            // decrement posid of everything after deleted task
-            const originalTask: ITask = { ...tasksCopy[i] };
-            tasksCopy[i].posid--;
-            updateTask(originalTask, tasksCopy[i], false);
-          }
-          setTasks(tasksCopy);
-        } else {
-          console.log("error!", response);
+        const index: number = tasks.indexOf(task);
+        const tasksCopy: ITask[] = [...tasks];
+        tasksCopy.splice(index, 1);
+        for (let i = index; i < tasksCopy.length; i++) {
+          // decrement posid of everything after deleted task
+          const originalTask: ITask = { ...tasksCopy[i] };
+          tasksCopy[i].posid--;
+          updateTask(originalTask, tasksCopy[i], false);
         }
+        setTasks(tasksCopy);
       })
       .catch((error) => console.log("error", error));
   };
 
-  const sensors = [useSensor(PointerSensor)];
+  /** Sensors for @dnd-kit */
+  const sensors = [useSensor(PointerSensor), useSensor(TouchSensor)];
+  /** On drag ending, updates all tasks affected. */
   const dragEnd = (event: DragEndEvent) => {
     if (event.active.id !== event.over.id) {
       const startID = parseInt(event.active.id);
@@ -127,6 +129,7 @@ const Tasks = ({
     }
   };
 
+  /** Grid of Tasks abstracted to be able to be passed sorted tasks. */
   const gridOfTasks = (tasks: ITask[]) => {
     return (
       <div
@@ -136,6 +139,7 @@ const Tasks = ({
           gridTemplateColumns: `repeat(auto-fit, minmax(300px, 1fr))`,
           gridGap: 10,
           padding: 10,
+          touchAction: "none",
         }}
       >
         {tasks.map((task, index) => render(task, index))}
@@ -143,6 +147,7 @@ const Tasks = ({
     );
   };
 
+  /** Control flow based on sort_method */
   if (userDetails.sort_method === "default") {
     return (
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={dragEnd}>
@@ -177,6 +182,7 @@ const Tasks = ({
   } else if (userDetails.sort_method === "alphabetical") {
     return gridOfTasks([...tasks].sort((a, b) => a.name.localeCompare(b.name)));
   } else {
+    // should not happen as sort_method is typed to only have those 3 possibilities.
     console.log("invalid sortMethod", userDetails);
     return null;
   }

@@ -1,8 +1,8 @@
 import { formatDateLong } from "./Functions/TaskFunctions";
 import ITask from "./interfaces/InterfaceTask";
-import React, { useState } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Col from "react-bootstrap/Col";
@@ -10,6 +10,7 @@ import Modal from "react-bootstrap/Modal";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 
+/** Drag Handle for dragging tasks around in "default" sort method. */
 const DragHandle = () => {
   // SVG obtained from bootstrap-icons
   return (
@@ -26,6 +27,7 @@ const DragHandle = () => {
   );
 };
 
+/** Task Component */
 const Task = ({
   task,
   updateTask,
@@ -55,11 +57,13 @@ const Task = ({
     const [editDescription, setEditDescription] = useState(false);
     const [editDate, setEditDate] = useState(false);
     const [editTags, setEditTags] = useState(false);
+    /** Handle form change. */
     const handleChange: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (
       event
     ) => {
       setModalTask({ ...modalTask, [event.target.name]: event.target.value });
     };
+    /** Handle form submission. */
     const handleSubmit = () => {
       const newTask = {
         id: modalTask.id,
@@ -173,14 +177,19 @@ const Task = ({
     );
   };
 
+  /** Handles toggle button press. */
   const handleToggleDone = () => {
     const updatedTask = { ...task, isdone: !task.isdone };
     updateTask(task, updatedTask);
   };
+
+  /** Handles delete button press. */
   const handleDelete = () => {
     deleteTask(task);
   };
 
+  /** Parameters important for @dnd-kit dragging. */
+  // @dnd-kit is used because it supports grids :D
   const { setNodeRef, attributes, listeners, transition, transform, isDragging } = useSortable({
     id: task.posid.toString(),
   });
@@ -194,6 +203,7 @@ const Task = ({
     // deadline and tags render only if not empty
     <div style={style}>
       <div className="text-center">
+        {/* Currently only draggable if sort_method is "default" */}
         {draggable && (
           <div className="d-inline-block" ref={setNodeRef} {...attributes} {...listeners}>
             <DragHandle />
@@ -208,6 +218,7 @@ const Task = ({
         border="dark"
         className={task.isdone ? "text-muted" : ""}
         style={{
+          // Shadow and transparency when being dragged.
           boxShadow: isDragging ? "3px 3px 1px #9E9E9E" : "",
           opacity: isDragging ? 0.5 : 1,
         }}

@@ -7,13 +7,13 @@ class TasksController < ApplicationController
               .sort_by{ |t| t[:posid] } # sort by posid
     if @tasks
       render json: {
-        status: 200,
+        status: "success",
         tasks: @tasks
-      }
+      }, status: 200
     else
       render json: {
-        status: 401
-      }
+        status: "not authorized"
+      }, status: 401
     end
   end
 
@@ -23,17 +23,17 @@ class TasksController < ApplicationController
     task = Task.find(params[:id])
     if session[:user_id] != task[:user_id]
       render json: {
-        status: 401 # not authorized
-      }
+        status: "not authorized"
+      }, status: 401
     elsif task
       render json: {
-        status: 200, # success
+        status: "success",
         task: task
-      }
+      }, status: 200
     else
       render json: {
-        status: 401 # not authorized
-      }
+        status: "not authorized"
+      }, status: 401
     end
   end
 

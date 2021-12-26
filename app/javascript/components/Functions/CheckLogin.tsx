@@ -2,6 +2,7 @@ import IUser from "../interfaces/InterfaceUser";
 import axios from "axios";
 import { NavigateFunction } from "react-router-dom";
 
+/** Checks if user is logged in. Handles setting of userDetails and navigation as well. */
 export const checkLoginStatus = (
   userDetails: IUser,
   setUserDetails: React.Dispatch<React.SetStateAction<IUser>>,

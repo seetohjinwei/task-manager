@@ -5,8 +5,6 @@ import Settings from "./Settings";
 import React, { useState } from "react";
 import { BrowserRouter as Router, Navigate, Route, Routes } from "react-router-dom";
 
-// main application page
-
 const initUser: IUser = {
   login_status: false,
   username: "",
@@ -18,6 +16,7 @@ const initUser: IUser = {
   sort_method: "default",
 };
 
+/** Main Application Component */
 const App = () => {
   const [userDetails, setUserDetails] = useState(initUser);
 

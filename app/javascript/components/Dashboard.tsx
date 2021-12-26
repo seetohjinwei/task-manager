@@ -2,6 +2,7 @@ import { checkLoginStatus } from "./Functions/CheckLogin";
 import { TaskAdder } from "./Functions/TaskFunctions";
 import ITask from "./interfaces/InterfaceTask";
 import IUser from "./interfaces/InterfaceUser";
+import NavigationBar from "./NavigationBar";
 import Search from "./Search";
 import Tasks from "./Tasks";
 import axios from "axios";
@@ -10,10 +11,10 @@ import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
-import NavigationBar from "./NavigationBar";
 import Row from "react-bootstrap/Row";
 import { useNavigate } from "react-router-dom";
 
+/** Page for /dashboard */
 const Dashboard = ({
   userDetails,
   setUserDetails,
@@ -26,6 +27,7 @@ const Dashboard = ({
   const [welcomeMessage, setWelcomeMessage] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
   const navigate = useNavigate();
+
   const welcomeMessages = [
     // prefix + username + postfix
     ["Hello ", "!"],
@@ -38,42 +40,35 @@ const Dashboard = ({
     ["You're back, ", "!"],
   ];
 
+  /** Randomises welcome message. */
   useEffect(() => {
     if (userDetails.username) {
-      // randomise welcome message when username is detected
       const index = Math.floor(Math.random() * welcomeMessages.length);
-      setWelcomeMessage(
-        welcomeMessages[index][0] + userDetails.username + welcomeMessages[index][1]
-      );
+      const [prefix, postfix] = welcomeMessages[index];
+      setWelcomeMessage(prefix + userDetails.username + postfix);
     }
   }, [userDetails.username]);
 
+  /** Loads tasks from database. */
   const loadTasks = () => {
-    // fetch tasks from database
     axios
       .get("https://jinwei-task-manager.herokuapp.com/tasks", { withCredentials: true })
       .then((response) => {
-        if (response.status !== 200) {
-          console.log("error");
-        } else {
-          setTasks(response.data.tasks);
-        }
+        setTasks(response.data.tasks);
       })
       .catch((error) => console.log(error));
   };
 
   useEffect(() => {
     if (!userDetails.login_status) {
-      // if loginStatus is true, can assume is directed from login/signup/settings
+      // loginStatus is true means that user was re-directed here, as opposed to navigating from URL manually.
       checkLoginStatus(userDetails, setUserDetails, navigate, "/dashboard");
     }
-    // will throw error "Can't perform a React state update on an unmounted component."
-    // but that's because we get re-directed out of /dashboard before loadTasks() can be completed
     loadTasks();
   }, []);
 
+  /** Handles sorting method change. */
   const handleSortMethodChange = (newMethod: IUser["sort_method"]) => {
-    // TODO: update in DB
     setUserDetails({ ...userDetails, sort_method: newMethod });
   };
 
@@ -110,7 +105,7 @@ const Dashboard = ({
             </Col>
             <Col className="col-2"></Col>
           </Row>
-          <Tasks {...{ tasks, setTasks, searchString, userDetails, setUserDetails }} />
+          <Tasks {...{ tasks, setTasks, searchString, userDetails }} />
         </div>
       </div>
     )

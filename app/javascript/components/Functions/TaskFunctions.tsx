@@ -5,7 +5,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 
-export const months = [
+const months = [
   "Secret Month 0", // I don't like subtraction
   "January",
   "February",
@@ -21,31 +21,31 @@ export const months = [
   "December",
 ];
 
+/** Converts "YYYY-MM-DD" to "DD LongMonth YYYY" */
 export const formatDateLong = (shortDate: string) => {
   const parts: string[] = shortDate.split("-");
   return parts[2] + " " + months[parseInt(parts[1])] + " " + parts[0];
 };
 
+/** Covnerts "DD LongMonth YYYY" to "YYYY-MM-DD" */
 export const formatDateShort = (longDate: string): string => {
   const parts: string[] = longDate.split(" ");
   return parts[2] + "-" + months.indexOf(parts[1]) + "-" + parts[0];
 };
 
+/** Adds task to database and adds to local state. */
 const addTask = (task, tasks: ITask[], setTasks: React.Dispatch<React.SetStateAction<ITask[]>>) => {
   axios
     .post("https://jinwei-task-manager.herokuapp.com/tasks", task, { withCredentials: true })
     .then((response) => {
-      if (response.status === 200) {
-        const tasksCopy = [...tasks];
-        tasksCopy.push(response.data.task);
-        setTasks(tasksCopy);
-      } else {
-        console.log("error", response);
-      }
+      const tasksCopy = [...tasks];
+      tasksCopy.push(response.data.task);
+      setTasks(tasksCopy);
     })
     .catch((error) => console.log("error", error));
 };
 
+/** Task adding Form/Modal (Form in a Modal). */
 export const TaskAdder = ({
   showAddModal,
   setShowAddModal,
@@ -60,23 +60,30 @@ export const TaskAdder = ({
   const blankTask = {
     name: "",
     description: "",
+    // tags is a string for easy modification, converted back when submitting.
     tags: "",
     deadline: "",
     isdone: false,
   };
   const [task, setTask] = useState(blankTask);
+  /** Handles form change. */
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     setTask({ ...task, [event.target.name]: event.target.value });
   };
+  /** Handles form submission. */
   const handleSubmit: React.MouseEventHandler<HTMLFormElement> = (event) => {
     const taskToBeAdded = {
       ...task,
+      // adds to the back
       posid: tasks.length,
+      // convert tags in this Modal from string to array.
       tags: task.tags === "" ? [] : task.tags.split(" "),
     };
     event.preventDefault();
+    // Hides Modal.
     setShowAddModal(false);
     addTask(taskToBeAdded, tasks, setTasks);
+    // Sets task back to blank so next time user opens up the form, it's blank.
     setTask(blankTask);
   };
 
