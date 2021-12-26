@@ -139,7 +139,6 @@ const Tasks = ({
           gridTemplateColumns: `repeat(auto-fit, minmax(300px, 1fr))`,
           gridGap: 10,
           padding: 10,
-          touchAction: "none",
         }}
       >
         {tasks.map((task, index) => render(task, index))}

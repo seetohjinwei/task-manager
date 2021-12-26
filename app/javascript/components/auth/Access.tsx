@@ -51,8 +51,7 @@ const Access = ({
   }, []);
 
   return (
-    // CSS: align center of screen
-    <div>
+    <div className="py-5">
       <div className="fs-4 d-flex justify-content-center align-items-center">
         {/* showLogin: Toggles between Login and Signup */}
         {showLogin ? (

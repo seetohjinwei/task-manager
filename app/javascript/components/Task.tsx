@@ -205,7 +205,13 @@ const Task = ({
       <div className="text-center">
         {/* Currently only draggable if sort_method is "default" */}
         {draggable && (
-          <div className="d-inline-block" ref={setNodeRef} {...attributes} {...listeners}>
+          <div
+            className="d-inline-block"
+            ref={setNodeRef}
+            {...attributes}
+            {...listeners}
+            style={{ touchAction: "none" }}
+          >
             <DragHandle />
             <DragHandle />
             <DragHandle />
