@@ -84,7 +84,7 @@ const SettingsForm = ({
   return (
     <div>
       {/* Forms render side-by-side unless screen is small. */}
-      <div className="d-flex" style={{ justifyContent: "space-between", flexWrap: "wrap" }}>
+      <div className="center-wrap">
         <Form className="my-3" onSubmit={handleOptionsSubmit}>
           <Form.Group className="my-3">
             <h2>Change Default Search Options</h2>
@@ -165,7 +165,7 @@ const SettingsForm = ({
           </Button>
         </Form>
       </div>
-      <div className="d-flex justify-content-center align-items-center mt-3">
+      <div className="center mt-3">
         {message && (
           <Alert variant="warning" onClose={() => setMessage("")} dismissible>
             {message}

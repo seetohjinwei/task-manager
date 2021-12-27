@@ -1,0 +1,45 @@
+/*
+  *= require_tree .
+  *= require_self
+*/
+
+// Globals
+@import "colors";
+
+// Components
+@import "button";
+@import "card";
+@import "input";
+@import "modal";
+
+body {
+  background-color: $grey-0;
+  color: $white;
+}
+
+h1,
+h2,
+h3 {
+  color: $yellow-0;
+}
+
+h4,
+h5 {
+  color: $purple-0;
+}
+
+h6 {
+  color: $teal-0;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.center-wrap {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}

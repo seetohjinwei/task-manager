@@ -36,7 +36,7 @@ const Dashboard = ({
     ["Hey there, ", "!"],
     ["", ", welcome!"],
     ["Your tasks, ", "."],
-    ["<username>", "</username>"],
+    ["<user>", "</user>"],
     ["You're back, ", "!"],
   ];
 
@@ -86,6 +86,7 @@ const Dashboard = ({
             </Col>
             <Col>
               <DropdownButton
+                variant="outline-secondary"
                 className="float-end m-1"
                 title={"Sorting by: " + userDetails.sort_method}
               >

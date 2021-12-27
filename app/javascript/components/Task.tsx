@@ -19,7 +19,7 @@ const DragHandle = () => {
       width="32"
       height="32"
       fill="currentColor"
-      className="bi bi-grip-horizontal"
+      className="bi bi-grip-horizontal draghandle"
       viewBox="0 0 16 16"
     >
       <path d="M2 8a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm0-3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm3 3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm0-3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm3 3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm0-3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm3 3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm0-3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm3 3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm0-3a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
@@ -81,12 +81,13 @@ const Task = ({
         show={showTaskModal}
         onHide={() => setShowTaskModal(false)}
         backdrop="static"
-        className={modalTask.isdone ? "text-muted" : ""}
+        className={modalTask.isdone && "text-muted"}
       >
         <Modal.Header closeButton>
           <Modal.Title>
             {editTitle ? (
               <input
+                className="form-input"
                 type="text"
                 name="name"
                 placeholder="Task Name"
@@ -103,8 +104,8 @@ const Task = ({
         <Modal.Body>
           {editDescription ? (
             <textarea
+              className="form-input"
               name="description"
-              className="w-100 mb-3"
               placeholder="Description"
               value={modalTask.description}
               onChange={handleChange}
@@ -126,13 +127,13 @@ const Task = ({
           )}
           {editDate ? (
             <input
+              className="form-input"
               type="date"
               name="deadline"
               placeholder="Deadline"
               value={modalTask.deadline}
               onChange={handleChange}
               onBlur={() => setEditDate(false)}
-              className="mb-3"
               autoFocus
             />
           ) : (
@@ -146,13 +147,13 @@ const Task = ({
           )}
           {editTags ? (
             <input
+              className="form-input"
               type="text"
               name="tags"
               placeholder="tag1 tag2 tag3"
               value={modalTask.tags}
               onChange={handleChange}
               onBlur={() => setEditTags(false)}
-              className="mb-3"
               autoFocus
             />
           ) : (
@@ -219,17 +220,7 @@ const Task = ({
         )}
       </div>
       <TaskModal />
-      <Card
-        bg="light"
-        border="dark"
-        className={task.isdone ? "text-muted" : ""}
-        style={{
-          // Shadow and transparency when being dragged.
-          boxShadow: isDragging ? "3px 3px 1px #9E9E9E" : "",
-          opacity: isDragging ? 0.5 : 1,
-        }}
-        body
-      >
+      <Card className={`${task.isdone && "text-muted"} ${isDragging && "card-dragging"}`} body>
         <Card.Title className="d-flex justify-content-between">
           <Col className="col-10" onClick={() => setShowTaskModal(true)}>
             {task.name}

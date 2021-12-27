@@ -1,0 +1,29 @@
+@import "colors";
+
+div.card {
+  background-color: $grey-1;
+  border-color: $grey-2;
+}
+
+div.card-body {
+  background-color: $grey-1;
+  border-color: $grey-2;
+}
+
+div.card-title {
+  color: $teal-0;
+}
+
+div.card-dragging {
+  box-shadow: 3px 3px 1px $grey-2;
+  opacity: 0.5;
+}
+
+svg.draghandle {
+  color: $grey-text;
+}
+
+div.card.text-muted {
+  color: $grey-text !important;
+  opacity: 0.6;
+}

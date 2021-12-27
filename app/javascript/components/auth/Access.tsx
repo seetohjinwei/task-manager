@@ -45,8 +45,8 @@ const Access = ({
   }, []);
 
   return (
-    <div className="py-5">
-      <div className="fs-4 d-flex justify-content-center align-items-center">
+    <div className="py-4">
+      <div className="center">
         {/* showLogin: Toggles between Login and Signup */}
         {showLogin ? (
           <Login
@@ -71,7 +71,7 @@ const Access = ({
         )}
       </div>
       {/* Error popup from displayError. */}
-      <div className="d-flex justify-content-center align-items-center mt-3">
+      <div className="center mt-3">
         {message && (
           <Alert variant="warning" onClose={() => setMessage("")} dismissible>
             {message}

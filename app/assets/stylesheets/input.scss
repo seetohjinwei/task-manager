@@ -1,0 +1,41 @@
+@import "colors";
+
+@mixin form-input {
+  background-color: $grey-1;
+  border-color: $grey-2;
+  color: $white;
+  &:active,
+  &:focus,
+  &:hover {
+    background-color: $grey-2;
+    color: $white;
+  }
+}
+
+input {
+  &.form-control {
+    @include form-input();
+  }
+  &.form-input {
+    @include form-input();
+    width: 100%;
+    margin-bottom: 1em;
+  }
+}
+
+textarea {
+  &.form-control {
+    @include form-input();
+  }
+  &.form-input {
+    @include form-input();
+    width: 100%;
+    margin-bottom: 1em;
+  }
+}
+
+label {
+  &.form-label {
+    color: $teal-0;
+  }
+}

@@ -1,0 +1,47 @@
+@import "colors";
+
+button.btn-primary {
+  background-color: $purple-0;
+  border-color: $purple-1;
+  color: $white;
+  &:active,
+  &:focus,
+  &:hover {
+    background-color: $purple-1;
+    border-color: $purple-2;
+    color: $white;
+  }
+}
+
+button.dropdown-toggle {
+  background-color: $purple-0;
+  border-color: $purple-1;
+  color: $white;
+  &:active,
+  &:focus,
+  &:hover {
+    background-color: $purple-1;
+    border-color: $purple-2;
+    color: $white;
+  }
+}
+
+div.dropdown-menu {
+  background-color: $grey-1;
+  color: $white;
+}
+
+a.dropdown-item {
+  color: $white;
+  &:active,
+  &:focus,
+  &:hover {
+    background-color: $grey-2;
+    color: $white;
+  }
+}
+
+button.btn-close {
+  // make it white
+  filter: invert(1) grayscale(100%) brightness(200%);
+}
