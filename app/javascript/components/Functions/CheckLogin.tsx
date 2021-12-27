@@ -1,5 +1,5 @@
+import { fetchCheckIfLoggedIn } from "./Fetch";
 import IUser from "../interfaces/InterfaceUser";
-import axios from "axios";
 import { NavigateFunction } from "react-router-dom";
 
 /** Checks if user is logged in. Handles setting of userDetails and navigation as well. */
@@ -9,9 +9,8 @@ export const checkLoginStatus = (
   navigate: NavigateFunction,
   navigateToIfSuccessful: string
 ) => {
-  return axios
-    .get("https://jinwei-task-manager.herokuapp.com/logged_in", { withCredentials: true })
-    .then((response) => {
+  fetchCheckIfLoggedIn(
+    (response) => {
       if (response.data.logged_in) {
         const user = response.data.user;
         setUserDetails({
@@ -33,6 +32,7 @@ export const checkLoginStatus = (
         });
         navigate("/");
       }
-    })
-    .catch((error) => console.log(error));
+    },
+    (error) => console.log(error)
+  );
 };

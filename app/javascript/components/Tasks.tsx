@@ -1,7 +1,7 @@
+import { fetchDeleteTask, fetchUpdateTask } from "./Functions/Fetch";
 import ITask from "./interfaces/InterfaceTask";
 import IUser from "./interfaces/InterfaceUser";
 import Task from "./Task";
-import axios from "axios";
 import {
   closestCenter,
   DndContext,
@@ -76,27 +76,25 @@ const Tasks = ({
     // ignore created_at, updated_at (never want to change them manually) -- postgres changes automatically
     const { posid, name, description, tags, deadline, isdone, ...rest } = newTask;
     const subsetTask = { posid, name, description, tags, deadline, isdone };
-    axios
-      .patch(`https://jinwei-task-manager.herokuapp.com/tasks/${newTask.id}`, subsetTask, {
-        withCredentials: true,
-      })
-      .then((response) => {
+    fetchUpdateTask(
+      newTask.id,
+      subsetTask,
+      (response) => {
         if (updateState) {
           const index: number = tasks.indexOf(originalTask);
           const tasksCopy: ITask[] = [...tasks];
           tasksCopy[index] = response.data.task;
           setTasks(tasksCopy);
         }
-      })
-      .catch((error) => console.log("error", error));
+      },
+      (error) => console.log("error", error)
+    );
   };
 
   const deleteTask = (task: ITask) => {
-    axios
-      .delete(`https://jinwei-task-manager.herokuapp.com/tasks/${task.id}`, {
-        withCredentials: true,
-      })
-      .then((response) => {
+    fetchDeleteTask(
+      task.id,
+      (response) => {
         const index: number = tasks.indexOf(task);
         const tasksCopy: ITask[] = [...tasks];
         tasksCopy.splice(index, 1);
@@ -107,8 +105,9 @@ const Tasks = ({
           updateTask(originalTask, tasksCopy[i], false);
         }
         setTasks(tasksCopy);
-      })
-      .catch((error) => console.log("error", error));
+      },
+      (error) => console.log("error", error)
+    );
   };
 
   /** Sensors for @dnd-kit */
@@ -149,7 +148,12 @@ const Tasks = ({
   /** Control flow based on sort_method */
   if (userDetails.sort_method === "default") {
     return (
-      <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={dragEnd}>
+      <DndContext
+        autoScroll
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={dragEnd}
+      >
         <SortableContext
           items={tasks.map((task) => task.posid.toString())}
           strategy={rectSortingStrategy}

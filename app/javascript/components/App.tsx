@@ -10,7 +10,6 @@ const initUser: IUser = {
   username: "",
   password: "",
   password_confirmation: "",
-  authentication_errors: "",
   display_done: true,
   strict_search: false,
   sort_method: "default",

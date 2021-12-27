@@ -3,7 +3,6 @@ export default interface IUser {
   username: string;
   password: string;
   password_confirmation: string;
-  authentication_errors: string;
   // display_done: hides "done" tasks
   display_done: boolean;
   // strict_search: matches for ALL search terms

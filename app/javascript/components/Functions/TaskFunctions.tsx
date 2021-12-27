@@ -1,5 +1,5 @@
+import { fetchAddTask } from "./Fetch";
 import ITask from "../interfaces/InterfaceTask";
-import axios from "axios";
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
@@ -35,14 +35,15 @@ export const formatDateShort = (longDate: string): string => {
 
 /** Adds task to database and adds to local state. */
 const addTask = (task, tasks: ITask[], setTasks: React.Dispatch<React.SetStateAction<ITask[]>>) => {
-  axios
-    .post("https://jinwei-task-manager.herokuapp.com/tasks", task, { withCredentials: true })
-    .then((response) => {
+  fetchAddTask(
+    task,
+    (response) => {
       const tasksCopy = [...tasks];
       tasksCopy.push(response.data.task);
       setTasks(tasksCopy);
-    })
-    .catch((error) => console.log("error", error));
+    },
+    (error) => console.log("error", error)
+  );
 };
 
 /** Task adding Form/Modal (Form in a Modal). */

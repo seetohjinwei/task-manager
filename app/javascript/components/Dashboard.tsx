@@ -1,11 +1,11 @@
 import { checkLoginStatus } from "./Functions/CheckLogin";
+import { fetchTasks } from "./Functions/Fetch";
 import { TaskAdder } from "./Functions/TaskFunctions";
 import ITask from "./interfaces/InterfaceTask";
 import IUser from "./interfaces/InterfaceUser";
 import NavigationBar from "./NavigationBar";
 import Search from "./Search";
 import Tasks from "./Tasks";
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
@@ -51,12 +51,12 @@ const Dashboard = ({
 
   /** Loads tasks from database. */
   const loadTasks = () => {
-    axios
-      .get("https://jinwei-task-manager.herokuapp.com/tasks", { withCredentials: true })
-      .then((response) => {
+    fetchTasks(
+      (response) => {
         setTasks(response.data.tasks);
-      })
-      .catch((error) => console.log(error));
+      },
+      (error) => console.log(error)
+    );
   };
 
   useEffect(() => {

@@ -13,7 +13,7 @@ const Access = ({
   userDetails: IUser;
   setUserDetails: React.Dispatch<React.SetStateAction<IUser>>;
 }) => {
-  const [showError, setShowError] = useState(false);
+  const [message, setMessage] = useState("");
   // showLogin === true: login, showLogin === false: signup
   const [showLogin, setShowLogin] = useState(true);
   const navigate = useNavigate();
@@ -27,12 +27,6 @@ const Access = ({
   /** Handles form change */
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     setUserDetails({ ...userDetails, [event.target.name]: event.target.value });
-  };
-
-  /** Takes in a message and displays the message. */
-  const displayError = (errorMessage: string): void => {
-    setShowError(true);
-    setUserDetails({ ...userDetails, authentication_errors: errorMessage });
   };
 
   /** Toggles between Login and Signup */
@@ -60,7 +54,7 @@ const Access = ({
               userDetails,
               handleSuccessfulAuth,
               handleChange,
-              displayError,
+              setMessage,
               toggleLoginSignup,
             }}
           />
@@ -70,7 +64,7 @@ const Access = ({
               userDetails,
               handleSuccessfulAuth,
               handleChange,
-              displayError,
+              setMessage,
               toggleLoginSignup,
             }}
           />
@@ -78,9 +72,9 @@ const Access = ({
       </div>
       {/* Error popup from displayError. */}
       <div className="d-flex justify-content-center align-items-center mt-3">
-        {showError && (
-          <Alert variant="warning" onClose={() => setShowError(false)} dismissible>
-            {userDetails.authentication_errors}
+        {message && (
+          <Alert variant="warning" onClose={() => setMessage("")} dismissible>
+            {message}
           </Alert>
         )}
       </div>

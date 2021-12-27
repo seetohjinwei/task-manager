@@ -1,5 +1,5 @@
+import { fetchSignup } from "../Functions/Fetch";
 import IUser from "../interfaces/InterfaceUser";
-import axios from "axios";
 import React from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
@@ -8,13 +8,13 @@ const Signup = ({
   userDetails,
   handleSuccessfulAuth,
   handleChange,
-  displayError,
+  setMessage,
   toggleLoginSignup,
 }: {
   userDetails: IUser;
   handleSuccessfulAuth: (User: IUser) => void;
   handleChange: React.ChangeEventHandler<HTMLInputElement>;
-  displayError: (errorMessage: string) => void;
+  setMessage: React.Dispatch<React.SetStateAction<string>>;
   toggleLoginSignup: () => void;
 }) => {
   /** Handles form submission. */
@@ -22,13 +22,13 @@ const Signup = ({
     event.preventDefault();
     // Double checks username and password lengths, even though HTML already prevents it.
     if (userDetails.username.length < 5) {
-      displayError("Username is required to have at least 5 characters.");
+      setMessage("Username is required to have at least 5 characters.");
       return;
     } else if (userDetails.password.length < 6) {
-      displayError("Password is required to have at least 6 characters.");
+      setMessage("Password is required to have at least 6 characters.");
       return;
     } else if (userDetails.password !== userDetails.password_confirmation) {
-      displayError("Passwords do not match.");
+      setMessage("Passwords do not match.");
       return;
     }
     const user = {
@@ -36,22 +36,19 @@ const Signup = ({
       password: userDetails.password,
       password_confirmation: userDetails.password_confirmation,
     };
-    axios
-      .post("https://jinwei-task-manager.herokuapp.com/registrations", user, {
-        withCredentials: true,
-      })
-      .then((response) => {
+    fetchSignup(
+      user,
+      (response) => {
         const user = response.data.user;
         handleSuccessfulAuth({
           ...user,
           login_status: true,
-          authentication_errors: userDetails.authentication_errors,
         });
-      })
-      .catch((error) => {
-        // error thrown from database
-        displayError("Username already exists!");
-      });
+      },
+      (error) => {
+        setMessage("Username already exists!");
+      }
+    );
   };
 
   return (

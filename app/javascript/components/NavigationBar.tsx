@@ -1,5 +1,5 @@
+import { fetchLogout } from "./Functions/Fetch";
 import IUser from "./interfaces/InterfaceUser";
-import axios from "axios";
 import React from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
@@ -16,17 +16,18 @@ const NavigationBar = ({
 }) => {
   /** Handles logout. */
   const handleLogout = () => {
-    axios
-      .delete("https://jinwei-task-manager.herokuapp.com/logout", { withCredentials: true })
-      .then()
-      .catch((error) => console.log("failed to logout", error));
-    setUserDetails({
-      ...userDetails,
-      login_status: false,
-      username: "",
-      password: "",
-      password_confirmation: "",
-    });
+    fetchLogout(
+      (response) => {
+        setUserDetails({
+          ...userDetails,
+          login_status: false,
+          username: "",
+          password: "",
+          password_confirmation: "",
+        });
+      },
+      (error) => console.log("failed to logout", error)
+    );
   };
   return (
     <Navbar sticky="top" bg="dark" variant="dark" expand="lg">

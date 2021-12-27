@@ -1,5 +1,5 @@
+import { fetchLogin } from "../Functions/Fetch";
 import IUser from "../interfaces/InterfaceUser";
-import axios from "axios";
 import React from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
@@ -8,13 +8,13 @@ const Login = ({
   userDetails,
   handleSuccessfulAuth,
   handleChange,
-  displayError,
+  setMessage,
   toggleLoginSignup,
 }: {
   userDetails: IUser;
   handleSuccessfulAuth: (User: IUser) => void;
   handleChange: React.ChangeEventHandler<HTMLInputElement>;
-  displayError: (errorMessage: string) => void;
+  setMessage: React.Dispatch<React.SetStateAction<string>>;
   toggleLoginSignup: () => void;
 }) => {
   /** Handles form submission. */
@@ -22,31 +22,31 @@ const Login = ({
     event.preventDefault();
     // Double checks username and password lengths, even though HTML already prevents it.
     if (userDetails.username.length < 5) {
-      displayError("Might wanna check your username. (It's too short.)");
+      setMessage("Might wanna check your username. (It's too short.)");
       return;
     } else if (userDetails.password.length < 6) {
-      displayError("Might wanna check your password. (It's too short.)");
+      setMessage("Might wanna check your password. (It's too short.)");
       return;
     }
     const user = {
       username: userDetails.username,
       password: userDetails.password,
     };
-    axios
-      .post("https://jinwei-task-manager.herokuapp.com/sessions", user, { withCredentials: true })
-      .then((response) => {
+    fetchLogin(
+      user,
+      (response) => {
         const user = response.data.user;
         handleSuccessfulAuth({
           ...user,
           password_confirmation: user.password,
           login_status: true,
-          authentication_errors: userDetails.authentication_errors,
         });
-      })
-      .catch((error) => {
+      },
+      (error) => {
         // error thrown from database
-        displayError("Wrong username or password.");
-      });
+        setMessage("Wrong username or password.");
+      }
+    );
   };
 
   return (

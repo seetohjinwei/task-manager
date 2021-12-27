@@ -1,5 +1,5 @@
+import { fetchChangePassword, fetchSearchOptions } from "./Functions/Fetch";
 import IUser from "./interfaces/InterfaceUser";
-import axios from "axios";
 import React, { useState } from "react";
 import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
@@ -25,13 +25,8 @@ const SettingsForm = ({
     password: "",
     password_confirmation: "",
   });
-  const [showError, setShowError] = useState(false);
+  const [message, setMessage] = useState("");
 
-  /** Takes in a message and displays the message. */
-  const displayError = (message: string) => {
-    setShowError(true);
-    setUserDetails({ ...userDetails, authentication_errors: message });
-  };
   /** Handles search options change. */
   const handleOptionsChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     setOptionsForm({ ...optionsForm, [event.target.name]: event.target.checked });
@@ -47,49 +42,43 @@ const SettingsForm = ({
   /** Handles options form submission. */
   const handleOptionsSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
-    axios
-      .patch(
-        "https://jinwei-task-manager.herokuapp.com/search_options",
-        {
-          display_done: optionsForm.display_done,
-          strict_search: optionsForm.strict_search,
-          sort_method: optionsForm.sort_method,
-        },
-        { withCredentials: true }
-      )
-      .then((response) => {
+    fetchSearchOptions(
+      {
+        display_done: optionsForm.display_done,
+        strict_search: optionsForm.strict_search,
+        sort_method: optionsForm.sort_method,
+      },
+      (response) => {
         setUserDetails({ ...userDetails, ...optionsForm });
-        displayError("Changed Successfully!");
-      })
-      .catch((error) => {
-        displayError("Something went wrong... You may want to try again in a bit.");
+        setMessage("Changed Successfully!");
+      },
+      (error) => {
+        setMessage("Something went wrong... You may want to try again in a bit.");
         console.log(error);
-      });
+      }
+    );
   };
   /** Handles password form submission. */
   const handlePasswordSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
     if (passwordForm.password !== passwordForm.password_confirmation) {
-      displayError("Passwords do not match!");
+      setMessage("Passwords do not match!");
     } else {
-      axios
-        .patch(
-          "https://jinwei-task-manager.herokuapp.com/change_password",
-          {
-            username: userDetails.username,
-            old_password: passwordForm.old_password,
-            password: passwordForm.password,
-            password_confirmation: passwordForm.password_confirmation,
-          },
-          { withCredentials: true }
-        )
-        .then((response) => {
-          displayError("Changed Successfully!");
-        })
-        .catch((error) => {
-          displayError("Wrong Password!");
+      fetchChangePassword(
+        {
+          username: userDetails.username,
+          old_password: passwordForm.old_password,
+          password: passwordForm.password,
+          password_confirmation: passwordForm.password_confirmation,
+        },
+        (response) => {
+          setMessage("Changed Successfully!");
+        },
+        (error) => {
+          setMessage("Wrong Password!");
           console.log(error);
-        });
+        }
+      );
     }
   };
   return (
@@ -177,9 +166,9 @@ const SettingsForm = ({
         </Form>
       </div>
       <div className="d-flex justify-content-center align-items-center mt-3">
-        {showError && (
-          <Alert variant="warning" onClose={() => setShowError(false)} dismissible>
-            {userDetails.authentication_errors}
+        {message && (
+          <Alert variant="warning" onClose={() => setMessage("")} dismissible>
+            {message}
           </Alert>
         )}
       </div>
