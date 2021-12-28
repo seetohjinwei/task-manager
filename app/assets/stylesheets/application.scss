@@ -13,23 +13,8 @@
 @import "modal";
 
 body {
-  background-color: $grey-0;
-  color: $white;
-}
-
-h1,
-h2,
-h3 {
-  color: $yellow-0;
-}
-
-h4,
-h5 {
-  color: $purple-0;
-}
-
-h6 {
-  color: $teal-0;
+  background-color: var(--bg-0);
+  color: var(--base);
 }
 
 .center {

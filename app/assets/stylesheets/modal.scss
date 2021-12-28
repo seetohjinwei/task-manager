@@ -1,20 +1,20 @@
 @import "colors";
 
 div.modal-content {
-  background-color: $grey-0;
+  background-color: var(--bg-0);
 }
 
 div.modal-title {
-  color: $teal-0;
+  color: var(--highlight-0);
   input.form-input {
-    color: $teal-0;
+    color: var(--highlight-0);
   }
 }
 
 div.modal-header {
-  border-color: $grey-0;
+  border-color: var(--bg-0);
 }
 
 div.modal-footer {
-  border-color: $grey-0;
+  border-color: var(--bg-0);
 }

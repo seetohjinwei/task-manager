@@ -1,14 +1,14 @@
 @import "colors";
 
 @mixin form-input {
-  background-color: $grey-1;
-  border-color: $grey-2;
-  color: $white;
+  background-color: var(--bg-1);
+  border-color: var(--bg-2);
+  color: var(--base);
   &:active,
   &:focus,
   &:hover {
-    background-color: $grey-2;
-    color: $white;
+    background-color: var(--bg-2);
+    color: var(--base);
   }
 }
 
@@ -36,6 +36,6 @@ textarea {
 
 label {
   &.form-label {
-    color: $teal-0;
+    color: var(--highlight-0);
   }
 }

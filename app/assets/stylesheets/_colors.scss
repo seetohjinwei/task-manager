@@ -1,16 +1,70 @@
-// Color Palette
+html[data-theme="default"] {
+  --bg-0: #ffffff;
+  --bg-1: #dddddd;
+  --bg-2: #c5c4c4;
+  --muted: #999999;
 
-$grey-0: #353535;
-$grey-1: #2c2c2c;
-$grey-2: #1d1d1d;
-$grey-text: #999999;
+  --title-0: #000000;
 
-$yellow-0: #f3e500;
+  --button-0: #8fbafa;
+  --button-1: #7ea5df;
+  --button-2: #7093c7;
 
-$purple-0: #ea00d9;
-$purple-1: #d602c8;
-$purple-2: #bb00ae;
+  --highlight-0: #0026ff;
 
-$teal-0: #02e1ec;
+  --base: #000000;
+}
 
-$white: #ffffff;
+html[data-theme="dark"] {
+  --bg-0: #353535;
+  --bg-1: #2c2c2c;
+  --bg-2: #1d1d1d;
+  --muted: #999999;
+
+  --title-0: #ffffff;
+
+  --button-0: #016fff;
+  --button-1: #0465e4;
+  --button-2: #0259ca;
+
+  --highlight-0: rgb(0, 102, 236);
+
+  --base: #ffffff;
+
+  button.btn-close {
+    // make it white
+    filter: invert(1) grayscale(100%) brightness(200%);
+  }
+
+  div.dropdown-menu {
+    background-color: var(--bg-1);
+    color: var(--base);
+  }
+}
+
+html[data-theme="cyberpunk"] {
+  --bg-0: #353535;
+  --bg-1: #2c2c2c;
+  --bg-2: #1d1d1d;
+  --muted: #999999;
+
+  --title-0: #f3e500;
+
+  --button-0: #ea00d9;
+  --button-1: #d602c8;
+  --button-2: #bb00ae;
+
+  --highlight-0: #02e1ec;
+
+  --base: #ffffff;
+
+  button.btn-close {
+    // make it white
+    filter: invert(1) grayscale(100%) brightness(200%);
+  }
+
+  div.dropdown-menu {
+    background-color: var(--bg-1);
+    color: var(--base);
+  }
+}

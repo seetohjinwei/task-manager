@@ -1,4 +1,10 @@
-import { fetchChangePassword, fetchSearchOptions } from "./Functions/Fetch";
+import {
+  fetchChangePassword,
+  fetchChangeTheme,
+  fetchSearchOptions,
+  fetchTheme,
+  themes,
+} from "./Functions/Fetch";
 import IUser from "./interfaces/InterfaceUser";
 import React, { useState } from "react";
 import Alert from "react-bootstrap/Alert";
@@ -19,6 +25,7 @@ const SettingsForm = ({
     display_done: userDetails.display_done,
     strict_search: userDetails.strict_search,
     sort_method: userDetails.sort_method,
+    theme: fetchTheme(),
   });
   const [passwordForm, setPasswordForm] = useState({
     old_password: "",
@@ -34,6 +41,9 @@ const SettingsForm = ({
   /** Handles sort method change. */
   const handleSortMethodChange = (method: IUser["sort_method"]) => {
     setOptionsForm({ ...optionsForm, sort_method: method });
+  };
+  const handleThemeChange = (theme: string) => {
+    setOptionsForm({ ...optionsForm, theme: theme });
   };
   /** Handles password form change. */
   const handlePasswordChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
@@ -57,6 +67,7 @@ const SettingsForm = ({
         console.log(error);
       }
     );
+    fetchChangeTheme(optionsForm.theme);
   };
   /** Handles password form submission. */
   const handlePasswordSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
@@ -87,7 +98,7 @@ const SettingsForm = ({
       <div className="center-wrap">
         <Form className="my-3" onSubmit={handleOptionsSubmit}>
           <Form.Group className="my-3">
-            <h2>Change Default Search Options</h2>
+            <h2>Change Default Options</h2>
             <DropdownButton
               variant="outline-secondary"
               className="my-2"
@@ -102,6 +113,19 @@ const SettingsForm = ({
               <Dropdown.Item onClick={() => handleSortMethodChange("alphabetical")}>
                 Alphabetical
               </Dropdown.Item>
+            </DropdownButton>
+            <DropdownButton
+              variant="outline-secondary"
+              className="my-2"
+              title={"Theme: " + optionsForm.theme}
+            >
+              {themes.map((theme, index) => {
+                return (
+                  <Dropdown.Item key={index} onClick={() => handleThemeChange(theme)}>
+                    {theme.substring(0, 1).toUpperCase() + theme.substring(1)}
+                  </Dropdown.Item>
+                );
+              })}
             </DropdownButton>
             <Form.Check
               type="switch"

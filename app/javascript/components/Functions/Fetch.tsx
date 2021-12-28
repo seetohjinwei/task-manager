@@ -108,3 +108,21 @@ export const fetchAddTask = (
     .then(funcIfSuccess)
     .catch(funcIfError);
 };
+
+export const themes = ["default", "dark", "cyberpunk"];
+
+export const fetchTheme = () => {
+  const fetchedTheme = (
+    document.cookie.split("; ").find((row) => row.startsWith("theme=")) || "theme=default"
+  ).split("=")[1];
+  const theme = themes.includes(fetchedTheme) ? fetchedTheme : "default";
+  document.documentElement.setAttribute("data-theme", theme);
+  return theme;
+};
+
+export const fetchChangeTheme = (theme: string) => {
+  axios
+    .get(`${domain}/change_theme?theme=${theme}`)
+    .then()
+    .catch((error) => console.log(error));
+};

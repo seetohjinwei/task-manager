@@ -1,29 +1,29 @@
 @import "colors";
 
 div.card {
-  background-color: $grey-1;
-  border-color: $grey-2;
+  background-color: var(--bg-1);
+  border-color: var(--bg-2);
 }
 
 div.card-body {
-  background-color: $grey-1;
-  border-color: $grey-2;
+  background-color: var(--bg-1);
+  border-color: var(--bg-2);
 }
 
 div.card-title {
-  color: $teal-0;
+  color: var(--highlight-0);
 }
 
 div.card-dragging {
-  box-shadow: 3px 3px 1px $grey-2;
+  box-shadow: 3px 3px 1px var(--bg-2);
   opacity: 0.5;
 }
 
 svg.draghandle {
-  color: $grey-text;
+  color: var(--muted);
 }
 
 div.card.text-muted {
-  color: $grey-text !important;
-  opacity: 0.6;
+  color: var(--muted) !important;
+  opacity: 0.3;
 }

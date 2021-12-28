@@ -1,8 +1,9 @@
+import { fetchTheme } from "./Functions/Fetch";
 import IUser from "./interfaces/InterfaceUser";
 import Access from "./auth/Access";
 import Dashboard from "./Dashboard";
 import Settings from "./Settings";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Navigate, Route, Routes } from "react-router-dom";
 
 const initUser: IUser = {
@@ -18,6 +19,10 @@ const initUser: IUser = {
 /** Main Application Component */
 const App = () => {
   const [userDetails, setUserDetails] = useState(initUser);
+
+  useEffect(() => {
+    fetchTheme();
+  }, []);
 
   return (
     <Router>
