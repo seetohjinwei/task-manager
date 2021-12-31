@@ -11,6 +11,7 @@
 @import "card";
 @import "input";
 @import "modal";
+@import "tasks";
 
 body {
   background-color: var(--bg-0);
@@ -27,4 +28,8 @@ body {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+}
+
+.no-touch-action {
+  touch-action: none;
 }

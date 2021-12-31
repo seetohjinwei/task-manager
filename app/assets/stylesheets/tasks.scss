@@ -1,0 +1,12 @@
+@import "colors";
+
+div.tasks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 10;
+  padding: 10;
+}
+
+div.task-description {
+  white-space: pre-line;
+}

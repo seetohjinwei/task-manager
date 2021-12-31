@@ -113,11 +113,7 @@ const Task = ({
               autoFocus
             />
           ) : (
-            <div
-              className="mb-3"
-              style={{ whiteSpace: "pre-line" }}
-              onClick={() => setEditDescription(true)}
-            >
+            <div className="mb-3 task-description" onClick={() => setEditDescription(true)}>
               {modalTask.description ? (
                 modalTask.description
               ) : (
@@ -207,11 +203,10 @@ const Task = ({
         {/* Currently only draggable if sort_method is "default" */}
         {draggable && (
           <div
-            className="d-inline-block"
+            className="d-inline-block no-touch-action"
             ref={setNodeRef}
             {...attributes}
             {...listeners}
-            style={{ touchAction: "none" }}
           >
             <DragHandle />
             <DragHandle />

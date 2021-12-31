@@ -89,7 +89,14 @@ export const TaskAdder = ({
   };
 
   return (
-    <Modal show={showAddModal} onHide={() => setShowAddModal(false)} backdrop="static">
+    <Modal
+      // bug with react-bootstrap, when animation is switched on, autoFocus does not work
+      // another option is to useEffect and a reference to force focus but that is very inefficient
+      animation={false}
+      show={showAddModal}
+      onHide={() => setShowAddModal(false)}
+      backdrop="static"
+    >
       <Modal.Header closeButton>
         <Modal.Title>New Task!</Modal.Title>
       </Modal.Header>
@@ -103,6 +110,7 @@ export const TaskAdder = ({
               placeholder="Task Name"
               value={task.name}
               onChange={handleChange}
+              autoFocus
               required
             />
           </Form.Group>

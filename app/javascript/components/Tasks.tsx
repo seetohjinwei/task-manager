@@ -130,19 +130,7 @@ const Tasks = ({
 
   /** Grid of Tasks abstracted to be able to be passed sorted tasks. */
   const gridOfTasks = (tasks: ITask[]) => {
-    return (
-      <div
-        style={{
-          display: "grid",
-          // dynamically changes how many tasks can fit in 1 row
-          gridTemplateColumns: `repeat(auto-fit, minmax(300px, 1fr))`,
-          gridGap: 10,
-          padding: 10,
-        }}
-      >
-        {tasks.map((task, index) => render(task, index))}
-      </div>
-    );
+    return <div className="tasks-grid">{tasks.map((task, index) => render(task, index))}</div>;
   };
 
   /** Control flow based on sort_method */
