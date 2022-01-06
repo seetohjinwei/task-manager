@@ -1,4 +1,5 @@
-export const sort_methods = ["default", "deadline", "alphabetical"];
+// need to update in Tasks.tsx as well, because each sort method has a different algorithm
+export const sort_methods = ["default", "name", "deadline", "tags"];
 
 export default interface IUser {
   login_status: boolean;

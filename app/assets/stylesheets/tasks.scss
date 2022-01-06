@@ -3,8 +3,9 @@
 div.tasks-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 10;
-  padding: 10;
+  gap: 1em;
+  padding: 1em;
+  row-gap: 1em;
 }
 
 div.task-description {

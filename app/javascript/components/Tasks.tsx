@@ -150,6 +150,8 @@ const Tasks = ({
         </SortableContext>
       </DndContext>
     );
+  } else if (userDetails.sort_method === "name") {
+    return gridOfTasks([...tasks].sort((a, b) => a.name.localeCompare(b.name)));
   } else if (userDetails.sort_method === "deadline") {
     return gridOfTasks(
       [...tasks].sort((a, b) => {
@@ -170,11 +172,28 @@ const Tasks = ({
         }
       })
     );
-  } else if (userDetails.sort_method === "alphabetical") {
-    return gridOfTasks([...tasks].sort((a, b) => a.name.localeCompare(b.name)));
+  } else if (userDetails.sort_method === "tags") {
+    return gridOfTasks(
+      [...tasks].sort((a, b) => {
+        const smallerLength = Math.min(a.tags.length, b.tags.length);
+        for (let index = 0; index < smallerLength; index++) {
+          const x = a.tags[index];
+          const y = b.tags[index];
+          if (x !== y) {
+            return x.localeCompare(y);
+          }
+        }
+        // tie break with number of tags
+        if (a.tags.length < b.tags.length) {
+          return 1;
+        } else {
+          return -1;
+        }
+      })
+    );
   } else {
     // should not happen as sort_method is typed to only have those 3 possibilities.
-    console.log("invalid sortMethod", userDetails);
+    console.log("invalid sortMethod, fix in Tasks.tsx", userDetails.sort_method, userDetails);
     return null;
   }
 };
