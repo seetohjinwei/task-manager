@@ -1,3 +1,5 @@
+export const sort_methods = ["default", "deadline", "alphabetical"];
+
 export default interface IUser {
   login_status: boolean;
   username: string;
@@ -7,5 +9,5 @@ export default interface IUser {
   display_done: boolean;
   // strict_search: matches for ALL search terms
   strict_search: boolean;
-  sort_method: "default" | "deadline" | "alphabetical";
+  sort_method: typeof sort_methods[number];
 }

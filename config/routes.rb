@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   patch :change_password, to: 'users#change_password'
   patch :search_options, to: 'users#search_options'
   resources :tasks, only: [:create, :destroy, :index, :show, :update]
+  delete :delete_finished, to: 'tasks#delete_finished'
   get :change_theme, to: 'themes#change'
   root 'homepage#index'
   get '/dashboard', to: 'homepage#dashboard'

@@ -1,10 +1,7 @@
 class TasksController < ApplicationController
   # GET request
   def index
-    @tasks = Task
-              .all
-              .filter{ |t| t[:user_id] == session[:user_id] }
-              .sort_by{ |t| t[:posid] } # sort by posid
+    @tasks = get_tasks()
     if @tasks
       render json: {
         status: "success",
@@ -97,9 +94,23 @@ class TasksController < ApplicationController
     end
   end
 
+  # deletes all finished tasks for current user
+  def delete_finished
+    Task.where(user_id: session[:user_id], isdone: true).destroy_all
+    render json: {
+      status: "success",
+      tasks: get_tasks()
+    }, status: 200
+  end
+
   private
 
   def task_params
     params.require(:task).permit(:posid, :name, :description, :deadline, :isdone, :user, :tags => [])
+  end
+
+  # fetches all tasks for current user from database
+  def get_tasks
+    Task.where(user_id: session[:user_id]).sort_by{ |t| t[:posid] } # sort by posid
   end
 end

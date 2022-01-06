@@ -1,8 +1,9 @@
 import { checkLoginStatus } from "./Functions/CheckLogin";
-import { fetchTasks } from "./Functions/Fetch";
+import { fetchDeleteFinishedTasks, fetchTasks } from "./Functions/Fetch";
+import { toTitleCase } from "./Functions/Misc";
 import { TaskAdder } from "./Functions/TaskFunctions";
 import ITask from "./interfaces/InterfaceTask";
-import IUser from "./interfaces/InterfaceUser";
+import IUser, { sort_methods } from "./interfaces/InterfaceUser";
 import NavigationBar from "./NavigationBar";
 import Search from "./Search";
 import Tasks from "./Tasks";
@@ -52,9 +53,7 @@ const Dashboard = ({
   /** Loads tasks from database. */
   const loadTasks = () => {
     fetchTasks(
-      (response) => {
-        setTasks(response.data.tasks);
-      },
+      (response) => setTasks(response.data.tasks),
       (error) => console.log(error)
     );
   };
@@ -66,6 +65,17 @@ const Dashboard = ({
     }
     loadTasks();
   }, []);
+
+  const handleClearFinishedTasks = () => {
+    if (
+      window.confirm("Are you sure you want to clear all finshed tasks? (this is irreversible)")
+    ) {
+      fetchDeleteFinishedTasks(
+        (reponse) => setTasks(reponse.data.tasks),
+        (error) => console.log("error", error)
+      );
+    }
+  };
 
   /** Handles sorting method change. */
   const handleSortMethodChange = (newMethod: IUser["sort_method"]) => {
@@ -83,6 +93,9 @@ const Dashboard = ({
             <Col>
               <h1>{welcomeMessage}</h1>
               <Search {...{ searchString, setSearchString, userDetails, setUserDetails }} />
+              <Button className="m-1" onClick={handleClearFinishedTasks}>
+                Clear Finished Tasks
+              </Button>
             </Col>
             <Col>
               <DropdownButton
@@ -90,15 +103,13 @@ const Dashboard = ({
                 className="float-end m-1"
                 title={"Sorting by: " + userDetails.sort_method}
               >
-                <Dropdown.Item onClick={() => handleSortMethodChange("default")}>
-                  Default
-                </Dropdown.Item>
-                <Dropdown.Item onClick={() => handleSortMethodChange("deadline")}>
-                  Deadline
-                </Dropdown.Item>
-                <Dropdown.Item onClick={() => handleSortMethodChange("alphabetical")}>
-                  Alphabetical
-                </Dropdown.Item>
+                {sort_methods.map((sort_type, index) => {
+                  return (
+                    <Dropdown.Item key={index} onClick={() => handleSortMethodChange(sort_type)}>
+                      {toTitleCase(sort_type)}
+                    </Dropdown.Item>
+                  );
+                })}
               </DropdownButton>
               <Button className="float-end m-1" onClick={() => setShowAddModal(true)}>
                 Add Task

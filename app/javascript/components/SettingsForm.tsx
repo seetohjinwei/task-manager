@@ -5,7 +5,8 @@ import {
   fetchTheme,
   themes,
 } from "./Functions/Fetch";
-import IUser from "./interfaces/InterfaceUser";
+import { toTitleCase } from "./Functions/Misc";
+import IUser, { sort_methods } from "./interfaces/InterfaceUser";
 import React, { useState } from "react";
 import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
@@ -104,15 +105,13 @@ const SettingsForm = ({
               className="my-2"
               title={"Sorting by: " + optionsForm.sort_method}
             >
-              <Dropdown.Item onClick={() => handleSortMethodChange("default")}>
-                Default
-              </Dropdown.Item>
-              <Dropdown.Item onClick={() => handleSortMethodChange("deadline")}>
-                Deadline
-              </Dropdown.Item>
-              <Dropdown.Item onClick={() => handleSortMethodChange("alphabetical")}>
-                Alphabetical
-              </Dropdown.Item>
+              {sort_methods.map((sort_type, index) => {
+                return (
+                  <Dropdown.Item key={index} onClick={() => handleSortMethodChange(sort_type)}>
+                    {toTitleCase(sort_type)}
+                  </Dropdown.Item>
+                );
+              })}
             </DropdownButton>
             <DropdownButton
               variant="outline-secondary"
@@ -122,7 +121,7 @@ const SettingsForm = ({
               {themes.map((theme, index) => {
                 return (
                   <Dropdown.Item key={index} onClick={() => handleThemeChange(theme)}>
-                    {theme.substring(0, 1).toUpperCase() + theme.substring(1)}
+                    {toTitleCase(theme)}
                   </Dropdown.Item>
                 );
               })}

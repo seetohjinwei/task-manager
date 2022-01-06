@@ -122,7 +122,17 @@ export const fetchTheme = () => {
 
 export const fetchChangeTheme = (theme: string) => {
   axios
-    .get(`${domain}/change_theme?theme=${theme}`)
+    .get(`${domain}/change_theme?theme=${theme}`, { withCredentials: true })
     .then()
     .catch((error) => console.log(error));
+};
+
+export const fetchDeleteFinishedTasks = (
+  funcIfSuccess: takeAxiosResponse,
+  funcIfError: takeAxiosResponse
+) => {
+  axios
+    .delete(`${domain}/delete_finished`, { withCredentials: true })
+    .then(funcIfSuccess)
+    .catch(funcIfError);
 };
