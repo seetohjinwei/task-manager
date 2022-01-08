@@ -26,8 +26,8 @@ const Tasks = ({
 }) => {
   const searchTerms: string[] = searchString.split(" ");
 
-  /** Responsible for deciding if a task is to be rendered. */
-  const render = (task: ITask, index: number) => {
+  /** Responsible for deciding if a particular task is to be rendered. */
+  const shouldRender = (task: ITask): boolean => {
     /** Checks if task matches a parameter. */
     const matchParam = (searchParam: string, strict: boolean): boolean => {
       if (strict && searchString !== "" && searchParam === "") {
@@ -51,12 +51,7 @@ const Tasks = ({
       ? searchTerms.every((searchParam) => matchParam(searchParam, true))
       : searchTerms.some((searchParam) => matchParam(searchParam, false));
 
-    const draggable = userDetails.sort_method === "default";
-
-    return (
-      passDisplayDone &&
-      passStrictSearch && <Task key={index} {...{ task, updateTask, deleteTask, draggable }} />
-    );
+    return passDisplayDone && passStrictSearch;
   };
 
   /** Updates task in database and in local state. */
@@ -130,7 +125,15 @@ const Tasks = ({
 
   /** Grid of Tasks abstracted to be able to be passed sorted tasks. */
   const gridOfTasks = (tasks: ITask[]) => {
-    return <div className="tasks-grid">{tasks.map((task, index) => render(task, index))}</div>;
+    const filteredTasks = tasks.filter(shouldRender);
+    const draggable = userDetails.sort_method === "default";
+    return (
+      <div className="tasks-grid">
+        {filteredTasks.map((task, index) => {
+          return <Task key={index} {...{ task, updateTask, deleteTask, draggable }} />;
+        })}
+      </div>
+    );
   };
 
   /** Control flow based on sort_method */
