@@ -1,7 +1,7 @@
 import { checkLoginStatus } from "./Functions/CheckLogin";
 import { fetchDeleteFinishedTasks, fetchTasks } from "./Functions/Fetch";
 import { toTitleCase } from "./Functions/Misc";
-import { TaskAdder } from "./Functions/TaskFunctions";
+import { TaskAdder, TaskClearer } from "./Functions/TaskFunctions";
 import ITask from "./interfaces/InterfaceTask";
 import IUser, { sort_methods } from "./interfaces/InterfaceUser";
 import NavigationBar from "./NavigationBar";
@@ -27,6 +27,7 @@ const Dashboard = ({
   const [searchString, setSearchString] = useState<string>("");
   const [welcomeMessage, setWelcomeMessage] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showClearModal, setShowClearModal] = useState(false);
   const navigate = useNavigate();
 
   const welcomeMessages = [
@@ -58,6 +59,14 @@ const Dashboard = ({
     );
   };
 
+  const clearTasks = () => {
+    setShowClearModal(false);
+    fetchDeleteFinishedTasks(
+      (reponse) => setTasks(reponse.data.tasks),
+      (error) => console.log("error", error)
+    );
+  };
+
   useEffect(() => {
     if (!userDetails.login_status) {
       // loginStatus is true means that user was re-directed here, as opposed to navigating from URL manually.
@@ -65,17 +74,6 @@ const Dashboard = ({
     }
     loadTasks();
   }, []);
-
-  const handleClearFinishedTasks = () => {
-    if (
-      window.confirm("Are you sure you want to clear all finshed tasks? (this is irreversible)")
-    ) {
-      fetchDeleteFinishedTasks(
-        (reponse) => setTasks(reponse.data.tasks),
-        (error) => console.log("error", error)
-      );
-    }
-  };
 
   /** Handles sorting method change. */
   const handleSortMethodChange = (newMethod: IUser["sort_method"]) => {
@@ -87,13 +85,14 @@ const Dashboard = ({
       <div>
         <NavigationBar {...{ userDetails, setUserDetails }} />
         <TaskAdder {...{ showAddModal, setShowAddModal, tasks, setTasks }} />
+        <TaskClearer {...{ showClearModal, setShowClearModal, clearTasks }} />
         <div className="m-5">
           <Row>
             <Col className="col-2"></Col>
             <Col>
               <h1>{welcomeMessage}</h1>
               <Search {...{ searchString, setSearchString, userDetails, setUserDetails }} />
-              <Button className="m-1" onClick={handleClearFinishedTasks}>
+              <Button className="m-1" onClick={() => setShowClearModal(true)}>
                 Clear Finished Tasks
               </Button>
             </Col>

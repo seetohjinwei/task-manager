@@ -152,3 +152,33 @@ export const TaskAdder = ({
     </Modal>
   );
 };
+
+export const TaskClearer = ({
+  showClearModal,
+  setShowClearModal,
+  clearTasks,
+}: {
+  showClearModal: boolean;
+  setShowClearModal: React.Dispatch<React.SetStateAction<boolean>>;
+  clearTasks: () => void;
+}) => {
+  return (
+    <Modal show={showClearModal} onHide={() => setShowClearModal(false)}>
+      <Modal.Header className="center">
+        <Modal.Title>Clear all finished tasks?</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <div className="center-wrap">
+          <p></p>
+          <p className="bi-check-lg" role="button" onClick={clearTasks}>
+            {" Yes!"}
+          </p>
+          <p className="bi-x" role="button" onClick={() => setShowClearModal(false)}>
+            {" Bring me back!"}
+          </p>
+          <p></p>
+        </div>
+      </Modal.Body>
+    </Modal>
+  );
+};
