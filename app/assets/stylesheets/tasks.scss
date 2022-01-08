@@ -11,3 +11,11 @@ div.tasks-grid {
 div.task-description {
   white-space: pre-line;
 }
+
+div.tasks-message {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+}

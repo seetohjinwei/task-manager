@@ -127,13 +127,26 @@ const Tasks = ({
   const gridOfTasks = (tasks: ITask[]) => {
     const filteredTasks = tasks.filter(shouldRender);
     const draggable = userDetails.sort_method === "default";
-    return (
-      <div className="tasks-grid">
-        {filteredTasks.map((task, index) => {
-          return <Task key={index} {...{ task, updateTask, deleteTask, draggable }} />;
-        })}
-      </div>
-    );
+    if (filteredTasks.length === 0) {
+      return (
+        <div className="tasks-grid tasks-message">
+          <h1>
+            {/* // empty searchString === no search being performed */}
+            {searchString.length === 0
+              ? "You're done with your tasks!"
+              : "No search results found."}
+          </h1>
+        </div>
+      );
+    } else {
+      return (
+        <div className="tasks-grid">
+          {filteredTasks.map((task, index) => {
+            return <Task key={index} {...{ task, updateTask, deleteTask, draggable }} />;
+          })}
+        </div>
+      );
+    }
   };
 
   /** Control flow based on sort_method */
@@ -195,7 +208,7 @@ const Tasks = ({
       })
     );
   } else {
-    // should not happen as sort_method is typed to only have those 3 possibilities.
+    // should not happen as sort_method is type-checked, but need to update when new sort_method is added.
     console.log("invalid sortMethod, fix in Tasks.tsx", userDetails.sort_method, userDetails);
     return null;
   }
