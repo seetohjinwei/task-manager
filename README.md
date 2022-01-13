@@ -4,13 +4,25 @@ Yet another task manager, built with React and Ruby on Rails.
 
 Sign up for an account to manage your tasks now!
 
-<a href="https://jinwei-task-manager.herokuapp.com/">Link to Task Manager</a>
+[Link to Task Manager](https://jinwei-task-manager.herokuapp.com/)
 
-NOTE: Heroku "sleeps" applications when they are inactive for more than 30 minutes. So, chances are that when you fire up this web application, it is sleeping. Do give it some time (around 5 seconds-ish) to wake up. However, once the application is woken up, it will be very snappy!
+NOTE: Heroku "sleeps" applications when they are inactive for more than 30 minutes. So, chances are that when you fire up this web application, it is sleeping. Do give it some time (around 5 to 10 seconds-ish) to wake up. However, once its woken up, it will be very snappy!
+
+## Features!
+
+Simple and easy to use. Just sign up for an account with a username and password and you can access your tasks on all your devices (with a working internet access).
+
+You can even tag, filter and sort your tasks in various ways for quickly finding a specific task (or even multiple).
+
+You can drag tasks around however you like (and they stay there).
+
+You might not like the default settings and that's fine! You can change them in the [settings page](https://jinwei-task-manager.herokuapp.com/settings). PS: You can change your password there too, if you like.
+
+You can also switch to various different themes (some screenshots below).
 
 ## User Manual
 
-<a href="https://github.com/seetohjinwei/Task-Manager/blob/master/user_manual/User Manual.pdf">PDF version here.</a>
+[PDF version here (looks nicer).](<https://github.com/seetohjinwei/Task-Manager/blob/master/user_manual/User Manual.pdf>)
 
 ### Login
 
@@ -53,11 +65,14 @@ Tasks in "Default" sort can be re-arranged by dragging the dots above each task.
 
 ### Sorting Tasks
 
-Alphabetical Sort
-![sort_alphabetical](./user_manual/images/sort_alphabetical.png)
+Name Sort
+![sort_name](./user_manual/images/sort_name.png)
 
 Deadline Sort -- The tasks without deadline will be at the back.
 ![sort_deadline](./user_manual/images/sort_deadline.png)
+
+Tags Sort -- The tasks without tags will be at the back.
+![sort_tags](./user_manual/images/sort_tags.png)
 
 ### Editing Tasks
 
@@ -66,6 +81,16 @@ Click on the task name to bring up a focused view of the task. From here, you ca
 ![task_modal](./user_manual/images/task_modal.png)
 ![task_modal_editing](./user_manual/images/task_modal_editing.png)
 ![task_modal_edited](./user_manual/images/task_modal_edited.png)
+
+### Marking as Done and Deleting
+
+Click on the checkmark and bin icons to mark as done and delete the task, respectively.
+
+### Clearing All Finished Tasks
+
+Just press "Yes!" to confirm to clear all finished tasks. You can press anywhere else to exit as well.
+
+![clear_all_tasks](./user_manual/images/clear_all_tasks.png)
 
 ### Settings
 
