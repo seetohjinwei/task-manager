@@ -1,11 +1,5 @@
 # Jin Wei's Task Manager
 
-Name: See Toh Jin Wei
-
-Matriculation Number: A0233308M
-
-[Link to CVWO Writeup](<https://github.com/seetohjinwei/Task-Manager/blob/master/SeeTohJinWei_A0233308M_FinalWriteup.pdf>)
-
 Yet another task manager, built with React and Ruby on Rails.
 
 Sign up for an account to manage your tasks now!
