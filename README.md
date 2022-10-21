@@ -4,9 +4,7 @@ Yet another task manager, built with React and Ruby on Rails.
 
 Sign up for an account to manage your tasks now!
 
-[Link to Task Manager](https://jinwei-task-manager.herokuapp.com/)
-
-NOTE: Heroku "sleeps" applications when they are inactive for more than 30 minutes. So, chances are that when you fire up this web application, it is sleeping. Do give it some time (around 5 to 10 seconds-ish) to wake up. However, once its woken up, it will be very snappy!
+[Link to Task Manager](https://tm.jinwei.dev/). Deployed on my own server, so it runs _really fast_!
 
 ## Features!
 
